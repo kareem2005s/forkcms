@@ -9,7 +9,7 @@ use Backend\Modules\Pages\Domain\ModuleExtra\ModuleExtraRepository;
 use Backend\Modules\Pages\Domain\Page\PageDataTransferObject;
 use Common\Core\Model;
 use Common\Form\SwitchType;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use SpoonFilter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -25,10 +25,10 @@ use Backend\Form\Type\EditorType;
 
 final class PageBlockType extends AbstractType
 {
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     private $entityManager;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
