@@ -43,16 +43,16 @@ $backend = new BackendInit($kernel);
 $backend->initialize('Console');
 
 $application = new Application($kernel);
-if ($kernel->getContainer()->get('fork.settings') instanceof ModulesSettings) {
+if ($kernel->getContainer()->get(ModulesSettings::class) instanceof ModulesSettings) {
     $application->add(
         new CopyLocaleCommand(
-            $kernel->getContainer()->get('fork.settings'),
+            $kernel->getContainer()->get(ModulesSettings::class),
             $kernel->getContainer()->get(ForkCMS\Utility\Module\CopyContentToOtherLocale\CopyContentFromModulesToOtherLocaleManager::class)
         )
     );
     $application->add(
         new EnableLocaleCommand(
-            $kernel->getContainer()->get('fork.settings'),
+            $kernel->getContainer()->get(ModulesSettings::class),
             $kernel->getContainer()->getParameter('installed_modules'),
             $kernel->getContainer()->getParameter('site.multilanguage')
         )
