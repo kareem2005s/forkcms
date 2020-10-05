@@ -12,6 +12,9 @@ services:
         bind:
             $commandBus: '@simple_bus.command_bus' # Generic // This should be replaced with the Messenger component
             $siteIsMultiLingual: '%site.multilanguage%' # Pages
+            $rootDir: '%kernel.project_dir%/' # RequirementsChecker
+            $projectDirectory: '%kernel.project_dir%' # InstallCommand
+            $forkIsInstalled: '%fork.is_installed%' # InstallCommand
 
     ForkCMS\App\ForkController:
 
