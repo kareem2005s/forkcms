@@ -37,6 +37,8 @@ services:
     ForkCMS\App\ForkController:
     Common\ModulesSettings:
         public: true
+    ForkCMS\Utility\Module\CopyContentToOtherLocale\CopyContentFromModulesToOtherLocaleManager:
+        public: true
     SpoonDatabase:
         class: SpoonDatabase
         arguments:
