@@ -16,8 +16,6 @@ services:
             $projectDirectory: '%kernel.project_dir%' # InstallCommand
             $forkIsInstalled: '%fork.is_installed%' # InstallCommand
 
-    ForkCMS\App\ForkController:
-
     ForkCMS\:
         resource: '../../src/ForkCMS/*'
         exclude:
@@ -36,6 +34,7 @@ services:
         exclude:
             - '../../src/Common/**/*Test.php'
 
+    ForkCMS\App\ForkController:
     Common\ModulesSettings:
     SpoonDatabase:
         class: SpoonDatabase
