@@ -2,11 +2,17 @@
 
 namespace Backend\Modules\MediaLibrary\Domain\MediaGroup;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Backend\Modules\MediaLibrary\Domain\MediaGroup\Exception\MediaGroupNotFound;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
-final class MediaGroupRepository extends EntityRepository
+final class MediaGroupRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, MediaGroup::class);
+    }
+
     public function add(MediaGroup $mediaGroup)
     {
         // We don't flush here, see http://disq.us/p/okjc6b
