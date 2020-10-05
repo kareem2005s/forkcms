@@ -5,7 +5,38 @@ imports:
 parameters:
     fork.is_installed: true
 
-# services:
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    ForkCMS\App\ForkController:
+
+    Backend\:
+        resource: '../../src/Backend/*'
+        exclude:
+            - '../../src/Backend/Form/EventListener/AddMetaSubscriber.php'
+    Frontend\:
+        resource: '../../src/Frontend/*'
+    Common\:
+        resource: '../../src/Common/*'
+
+    SpoonDatabase:
+        class: SpoonDatabase
+        arguments:
+            - "%database.driver%"
+            - "%database.host%"
+            - "%database.user%"
+            - "%database.password%"
+            - "%database.name%"
+            - "%database.port%"
+        calls:
+            - [ execute, [ 'SET CHARACTER SET :charset, NAMES :charset, time_zone = "+0:00"', { 'charset': 'utf8mb4' } ] ]
+            # The following line removes the ONLY_FULL_GROUP_BY from the sessions sql_mode, it was added in 5.7
+            # and caused some queries to break.
+            - [ execute, [ 'SET sql_mode = REPLACE(@@SESSION.sql_mode, "ONLY_FULL_GROUP_BY", "")'] ]
+            - [ setDebug, [ "%kernel.debug%" ]]
+
 #    templating:
 #        class: Frontend\Core\Engine\TwigTemplate
 #        public: true
