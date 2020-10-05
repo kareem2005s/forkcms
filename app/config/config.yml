@@ -9,6 +9,9 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $commandBus: '@simple_bus.command_bus' # Generic // This should be replaced with the Messenger component
+            $siteIsMultiLingual: '%site.multilanguage%' # Pages
 
     ForkCMS\App\ForkController:
 
