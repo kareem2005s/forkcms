@@ -21,7 +21,7 @@ services:
     ForkCMS\:
         resource: '../../src/ForkCMS/*'
         exclude:
-            - '../../src/Backend/**/*Test.php'
+            - '../../src/ForkCMS/**/*Test.php'
     Backend\:
         resource: '../../src/Backend/*'
         exclude:
