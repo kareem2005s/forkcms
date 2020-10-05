@@ -11,7 +11,7 @@ use Backend\Init as BackendInit;
 use Frontend\Init as FrontendInit;
 use Common\Exception\RedirectException;
 use Symfony\Component\HttpFoundation\Response;
-use Twig_Error;
+use Twig\Error\Error;
 
 /**
  * Application routing
@@ -97,7 +97,7 @@ class ForkController extends AbstractController
             return $application->display();
         } catch (RedirectException $ex) {
             return $ex->getResponse();
-        } catch (Twig_Error $twigError) {
+        } catch (Error $twigError) {
             if ($twigError->getPrevious() instanceof RedirectException) {
                 return $twigError->getPrevious()->getResponse();
             }
