@@ -6,6 +6,7 @@ use SpoonDatabase;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class DatabaseDataCollector extends DataCollector
 {
@@ -19,7 +20,7 @@ class DatabaseDataCollector extends DataCollector
         $this->database = $database;
     }
 
-    public function collect(Request $request, Response $response, \Exception $exception = null): void
+    public function collect(Request $request, Response $response, Throwable $exception = null): void
     {
         $this->data = [
             'queries' => array_map(
