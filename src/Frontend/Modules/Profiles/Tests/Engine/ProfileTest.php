@@ -4,7 +4,6 @@ namespace Frontend\Modules\Profiles\Tests\Engine;
 
 use Backend\Modules\Profiles\DataFixtures\LoadProfilesProfile;
 use Frontend\Core\Tests\FrontendWebTestCase;
-use Frontend\Modules\Profiles\Engine\Profile;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Backend\Modules\Profiles\Domain\Profile\Profile;
 use Backend\Modules\Profiles\Domain\Profile\Status;
