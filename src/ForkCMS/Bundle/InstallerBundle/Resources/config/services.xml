@@ -2,7 +2,7 @@
 <container xmlns="http://symfony.com/schema/dic/services"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-    <services>
+<!--    <services>
         <service id="forkcms.requirements.checker" class="ForkCMS\Bundle\InstallerBundle\Service\RequirementsChecker" public="true">
             <argument>%kernel.project_dir%/</argument>
         </service>
@@ -27,5 +27,5 @@
             <argument type="service" id="forkcms.console.installer.prepare_for_reinstall"/>
           <tag name="console.command" />
         </service>
-    </services>
+    </services>-->
 </container>
