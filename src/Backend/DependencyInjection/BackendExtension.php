@@ -16,6 +16,7 @@ class BackendExtension extends Extension implements PrependExtensionInterface
 
     public function prepend(ContainerBuilder $container): void
     {
+        return;
         $filesystem = new Filesystem();
         foreach ((array) $container->getParameter('installed_modules') as $module) {
             $dir = $container->getParameter('kernel.project_dir') . '/src/Backend/Modules/' . $module . '/Entity';
