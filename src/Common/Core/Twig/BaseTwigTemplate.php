@@ -6,14 +6,13 @@ use Common\Core\Form;
 use Common\Core\Model;
 use Common\ModulesSettings;
 use SpoonForm;
-use Symfony\Bundle\TwigBundle\TwigEngine;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  * This is a twig template wrapper
  * that glues spoon libraries and code standards with twig.
  */
-abstract class BaseTwigTemplate extends TwigEngine
+abstract class BaseTwigTemplate extends Environment
 {
     /**
      * @var string
@@ -108,28 +107,26 @@ abstract class BaseTwigTemplate extends TwigEngine
 
     /** @todo Refactor out constants #1106
      * We need to deprecate this asap
-     *
-     * @param Twig_Environment $twig
      */
-    protected function startGlobals(Twig_Environment $twig)
+    protected function startGlobals()
     {
         // some old globals
-        $twig->addGlobal('var', '');
-        $twig->addGlobal('CRLF', "\n");
-        $twig->addGlobal('TAB', "\t");
-        $twig->addGlobal('now', time());
-        $twig->addGlobal('LANGUAGE', $this->language);
-        $twig->addGlobal('is'.strtoupper($this->language), true);
-        $twig->addGlobal('debug', $this->debugMode);
+        $this->addGlobal('var', '');
+        $this->addGlobal('CRLF', "\n");
+        $this->addGlobal('TAB', "\t");
+        $this->addGlobal('now', time());
+        $this->addGlobal('LANGUAGE', $this->language);
+        $this->addGlobal('is'.strtoupper($this->language), true);
+        $this->addGlobal('debug', $this->debugMode);
 
-        $twig->addGlobal('timestamp', time());
+        $this->addGlobal('timestamp', time());
 
         // get all defined constants
         $constants = get_defined_constants(true);
 
         // remove protected constants aka constants that should not be used in the template
         foreach ($constants['user'] as $key => $value) {
-            $twig->addGlobal($key, $value);
+            $this->addGlobal($key, $value);
         }
 
         /* Setup Backend for the Twig environment. */
@@ -137,48 +134,48 @@ abstract class BaseTwigTemplate extends TwigEngine
             return;
         }
 
-        $twig->addGlobal('timeFormat', $this->forkSettings->get('Core', 'time_format'));
-        $twig->addGlobal('dateFormatShort', $this->forkSettings->get('Core', 'date_format_short'));
-        $twig->addGlobal('dateFormatLong', $this->forkSettings->get('Core', 'date_format_long'));
+        $this->addGlobal('timeFormat', $this->forkSettings->get('Core', 'time_format'));
+        $this->addGlobal('dateFormatShort', $this->forkSettings->get('Core', 'date_format_short'));
+        $this->addGlobal('dateFormatLong', $this->forkSettings->get('Core', 'date_format_long'));
 
         // old theme checker
         if ($this->forkSettings->get('Core', 'theme') !== null) {
-            $twig->addGlobal('THEME', $this->forkSettings->get('Core', 'theme', 'Fork'));
-            $twig->addGlobal(
+            $this->addGlobal('THEME', $this->forkSettings->get('Core', 'theme', 'Fork'));
+            $this->addGlobal(
                 'THEME_URL',
                 '/src/Frontend/Themes/'.$this->forkSettings->get('Core', 'theme', 'Fork')
             );
         }
 
         // settings
-        $twig->addGlobal(
+        $this->addGlobal(
             'SITE_TITLE',
             $this->forkSettings->get('Core', 'site_title_'.$this->language, SITE_DEFAULT_TITLE)
         );
-        $twig->addGlobal(
+        $this->addGlobal(
             'SITE_URL',
             SITE_URL
         );
-        $twig->addGlobal(
+        $this->addGlobal(
             'SITE_DOMAIN',
             SITE_DOMAIN
         );
 
         // facebook stuff
         if ($this->forkSettings->get('Core', 'facebook_admin_ids', null) !== null) {
-            $twig->addGlobal(
+            $this->addGlobal(
                 'FACEBOOK_ADMIN_IDS',
                 $this->forkSettings->get('Core', 'facebook_admin_ids', null)
             );
         }
         if ($this->forkSettings->get('Core', 'facebook_app_id', null) !== null) {
-            $twig->addGlobal(
+            $this->addGlobal(
                 'FACEBOOK_APP_ID',
                 $this->forkSettings->get('Core', 'facebook_app_id', null)
             );
         }
         if ($this->forkSettings->get('Core', 'facebook_app_secret', null) !== null) {
-            $twig->addGlobal(
+            $this->addGlobal(
                 'FACEBOOK_APP_SECRET',
                 $this->forkSettings->get('Core', 'facebook_app_secret', null)
             );
@@ -187,7 +184,7 @@ abstract class BaseTwigTemplate extends TwigEngine
         // twitter stuff
         if ($this->forkSettings->get('Core', 'twitter_site_name', null) !== null) {
             // strip @ from twitter username
-            $twig->addGlobal(
+            $this->addGlobal(
                 'TWITTER_SITE_NAME',
                 ltrim($this->forkSettings->get('Core', 'twitter_site_name', null), '@')
             );
