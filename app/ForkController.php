@@ -11,6 +11,7 @@ use Backend\Init as BackendInit;
 use Frontend\Init as FrontendInit;
 use Common\Exception\RedirectException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Error\Error;
 
 /**
@@ -18,6 +19,16 @@ use Twig\Error\Error;
  */
 class ForkController extends AbstractController
 {
+    /**
+     * @var KernelInterface
+     */
+    private $kernel;
+
+    public function __construct(KernelInterface $kernel)
+    {
+        $this->kernel = $kernel;
+    }
+
     const DEFAULT_APPLICATION = 'Frontend';
 
     /**
@@ -46,7 +57,7 @@ class ForkController extends AbstractController
     public function backendController(): Response
     {
         $applicationClass = $this->initializeBackend('Backend');
-        $application = new $applicationClass($this->container->get('kernel'));
+        $application = new $applicationClass($this->kernel);
 
         return $this->handleApplication($application);
     }
@@ -57,7 +68,7 @@ class ForkController extends AbstractController
     public function backendAjaxController(): Response
     {
         $applicationClass = $this->initializeBackend('BackendAjax');
-        $application = new $applicationClass($this->container->get('kernel'));
+        $application = new $applicationClass($this->kernel);
 
         return $this->handleApplication($application);
     }
@@ -68,7 +79,7 @@ class ForkController extends AbstractController
     public function frontendController(): Response
     {
         $applicationClass = $this->initializeFrontend('Frontend');
-        $application = new $applicationClass($this->container->get('kernel'));
+        $application = new $applicationClass($this->kernel);
 
         return $this->handleApplication($application);
     }
@@ -79,7 +90,7 @@ class ForkController extends AbstractController
     public function frontendAjaxController(): Response
     {
         $applicationClass = $this->initializeFrontend('FrontendAjax');
-        $application = new $applicationClass($this->container->get('kernel'));
+        $application = new $applicationClass($this->kernel);
 
         return $this->handleApplication($application);
     }
@@ -113,7 +124,7 @@ class ForkController extends AbstractController
      */
     protected function initializeBackend(string $app): string
     {
-        $init = new BackendInit($this->container->get('kernel'));
+        $init = new BackendInit($this->kernel);
         $init->initialize($app);
 
         return $app === 'BackendAjax' ? BackendAjax::class : Backend::class;
@@ -126,7 +137,7 @@ class ForkController extends AbstractController
      */
     protected function initializeFrontend(string $app): string
     {
-        $init = new FrontendInit($this->container->get('kernel'));
+        $init = new FrontendInit($this->kernel);
         $init->initialize($app);
 
         return $app === 'FrontendAjax' ? FrontendAjax::class : Frontend::class;
