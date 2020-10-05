@@ -24,19 +24,19 @@ doctrine:
             default:
                 dbname: "%database.name%_test"
 
-services:
-    database:
-        class: SpoonDatabase
-        public: true
-        arguments:
-            - "%database.driver%"
-            - "%database.host%"
-            - "%database.user%"
-            - "%database.password%"
-            - "%database.name%_test"
-            - "%database.port%"
-        calls:
-            - [ setDebug, [ "%kernel.debug%" ]]
+#services:
+#    database:
+#        class: SpoonDatabase
+#        public: true
+#        arguments:
+#            - "%database.driver%"
+#            - "%database.host%"
+#            - "%database.user%"
+#            - "%database.password%"
+#            - "%database.name%_test"
+#            - "%database.port%"
+#        calls:
+#            - [ setDebug, [ "%kernel.debug%" ]]
 
 monolog:
     handlers:

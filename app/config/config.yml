@@ -5,21 +5,15 @@ imports:
 parameters:
     fork.is_installed: true
 
-services:
-    templating:
-        class: Frontend\Core\Engine\TwigTemplate
-        public: true
-        arguments:
-            - "@twig"
-            - "@templating.name_parser"
-            - "@templating.locator"
-
-    translator:
-        class: Common\Language
-        public: true
-        arguments:
-            - "@translator.selector"
-
-fos_rest:
-    routing_loader:
-        default_format: json
+# services:
+#    templating:
+#        class: Frontend\Core\Engine\TwigTemplate
+#        public: true
+#        arguments:
+#            - "@twig"
+#            - "@templating.name_parser"
+#            - "@templating.locator"
+#
+#    translator:
+#        class: Common\Language
+#        public: true
