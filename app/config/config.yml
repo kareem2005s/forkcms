@@ -18,6 +18,10 @@ services:
 
     ForkCMS\App\ForkController:
 
+    ForkCMS\:
+        resource: '../../src/ForkCMS/*'
+        exclude:
+            - '../../src/Backend/**/*Test.php'
     Backend\:
         resource: '../../src/Backend/*'
         exclude:
