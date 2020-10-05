@@ -19,10 +19,15 @@ services:
         resource: '../../src/Backend/*'
         exclude:
             - '../../src/Backend/Form/EventListener/AddMetaSubscriber.php'
+            - '../../src/Backend/**/*Test.php'
     Frontend\:
         resource: '../../src/Frontend/*'
+        exclude:
+            - '../../src/Frontend/**/*Test.php'
     Common\:
         resource: '../../src/Common/*'
+        exclude:
+            - '../../src/Common/**/*Test.php'
 
     SpoonDatabase:
         class: SpoonDatabase
