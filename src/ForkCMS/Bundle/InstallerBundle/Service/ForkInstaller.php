@@ -14,7 +14,7 @@ use Backend\Modules\Pages\Domain\PageBlock\PageBlockRepository;
 use Backend\Modules\Pages\Domain\PageBlock\Type as PageBlockType;
 use ForkCMS\Bundle\InstallerBundle\Controller\InstallerController;
 use ForkCMS\Bundle\InstallerBundle\Entity\InstallationData;
-use Symfony\Component\DependencyInjection\Container;
+use SpoonDatabase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -24,28 +24,40 @@ use Symfony\Component\Finder\Finder;
 class ForkInstaller
 {
     /**
-     * The Dependency injection container
-     *
-     * @var Container
-     */
-    private $container;
-
-    /**
      * @var array
      */
     private $defaultExtras = [];
 
     /**
-     * @todo: - make sure the Container doesn't have to be injected
-     *        - make sure the Model::setContainer isn't needed anymore
-     *
-     * @param Container $container
+     * @var SpoonDatabase
      */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
+    private $database;
 
-        Model::setContainer($container);
+    /**
+     * @var PageBlockRepository
+     */
+    private $pageBlockRepository;
+
+    /**
+     * @var PageRepository
+     */
+    private $pageRepository;
+
+    /**
+     * @var ModuleExtraRepository
+     */
+    private $moduleExtraRepository;
+
+    public function __construct(
+        SpoonDatabase $database,
+        PageBlockRepository $pageBlockRepository,
+        PageRepository $pageRepository,
+        ModuleExtraRepository $moduleExtraRepository
+    ) {
+        $this->database = $database;
+        $this->pageBlockRepository = $pageBlockRepository;
+        $this->pageRepository = $pageRepository;
+        $this->moduleExtraRepository = $moduleExtraRepository;
     }
 
     /**
@@ -142,10 +154,8 @@ class ForkInstaller
 
     protected function buildDatabase(InstallationData $data): void
     {
-        // put a new instance of the database in the container
-        $database = $this->container->get('database');
         // lets do some magic to add the database connection details from the installation data
-        $database->__construct(
+        $this->database->__construct(
             'mysql',
             $data->getDatabaseHostname(),
             $data->getDatabaseUsername(),
@@ -153,11 +163,11 @@ class ForkInstaller
             $data->getDatabaseName(),
             $data->getDatabasePort()
         );
-        $database->execute(
+        $this->database->execute(
             'SET CHARACTER SET :charset, NAMES :charset, time_zone = "+0:00"',
             ['charset' => 'utf8mb4']
         );
-        $database->execute(
+        $this->database->execute(
             'SET sql_mode = REPLACE(@@SESSION.sql_mode, "ONLY_FULL_GROUP_BY", "")'
         );
     }
@@ -166,7 +176,7 @@ class ForkInstaller
     {
         // create the core installer
         return new CoreInstaller(
-            $this->container->get('database'),
+            $this->database,
             $data->getLanguages(),
             $data->getInterfaceLanguages(),
             $data->hasExampleData(),
@@ -189,7 +199,7 @@ class ForkInstaller
                 // create installer
                 /** @var $install ModuleInstaller */
                 $installer = new $class(
-                    $this->container->get('database'),
+                    $this->database,
                     $data->getLanguages(),
                     $data->getInterfaceLanguages(),
                     $data->hasExampleData(),
@@ -210,13 +220,9 @@ class ForkInstaller
 
     protected function installExtras(): void
     {
-        /** @var PageBlockRepository $pageBlockRepository */
-        $pageBlockRepository = Model::get(PageBlockRepository::class);
-
         // loop default extras
         foreach ($this->defaultExtras as $extra) {
-            $pageRepository = Model::getContainer()->get(PageRepository::class);
-            $pages = $pageRepository->findPagesWithoutExtra($extra['id']);
+            $pages = $this->pageRepository->findPagesWithoutExtra($extra['id']);
             $type = $extra['id'] === null ? PageBlockType::richText() : $this->getPageBlockTypeForModuleExtra($extra['id']);
             if ($extra['id'] !== null && $type->isRichText()) {
                 continue; // module extra doesn't exist
@@ -233,8 +239,8 @@ class ForkInstaller
                     0
                 );
 
-                $pageBlockRepository->add($pageBlock);
-                $pageBlockRepository->save($pageBlock);
+                $this->pageBlockRepository->add($pageBlock);
+                $this->pageBlockRepository->save($pageBlock);
             }
         }
     }
@@ -249,7 +255,7 @@ class ForkInstaller
         // loop all the languages
         foreach ($languages as $language) {
             // get applications
-            $applications = $this->container->get('database')->getColumn(
+            $applications = $this->database->getColumn(
                 'SELECT DISTINCT application
                  FROM locale
                  WHERE language = ?',
@@ -360,7 +366,7 @@ class ForkInstaller
 
     private function getPageBlockTypeForModuleExtra(int $extraId): PageBlockType
     {
-        $moduleExtra = Model::getContainer()->get(ModuleExtraRepository::class)->find($extraId);
+        $moduleExtra = $this->moduleExtraRepository->find($extraId);
 
         if (!$moduleExtra instanceof ModuleExtra) {
             return PageBlockType::richText();
