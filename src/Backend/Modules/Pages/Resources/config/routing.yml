@@ -1,4 +1,4 @@
 pages_api:
-    type:     rest
+    type:     annotation
     prefix:   /api
     resource: Backend\Modules\Pages\Api\PageController
