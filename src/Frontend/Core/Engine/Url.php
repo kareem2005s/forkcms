@@ -3,7 +3,9 @@
 namespace Frontend\Core\Engine;
 
 use Backend\Modules\Pages\Domain\Page\Page as PageEntity;
+use Common\Core\Cookie;
 use Common\Exception\RedirectException;
+use Common\ModulesSettings;
 use ForkCMS\App\KernelLoader;
 use Frontend\Core\Language\Language;
 use SpoonFilter;
@@ -221,7 +223,7 @@ class Url extends KernelLoader
     private function determineLanguage(string $queryString): string
     {
         if (!$this->getContainer()->getParameter('site.multilanguage')) {
-            return $this->get('fork.settings')->get('Core', 'default_language', SITE_DEFAULT_LANGUAGE);
+            return $this->get(ModulesSettings::class)->get('Core', 'default_language', SITE_DEFAULT_LANGUAGE);
         }
 
         // get possible languages
@@ -242,7 +244,7 @@ class Url extends KernelLoader
             return $language;
         }
 
-        $cookie = $this->getContainer()->get('fork.cookie');
+        $cookie = $this->getContainer()->get(Cookie::class);
         if ($cookie->has('frontend_language')
             && in_array($cookie->get('frontend_language'), $redirectLanguages, true)
         ) {
@@ -258,7 +260,7 @@ class Url extends KernelLoader
     private function setLanguageCookie(string $language): void
     {
         try {
-            self::getContainer()->get('fork.cookie')->set('frontend_language', $language);
+            self::getContainer()->get(Cookie::class)->set('frontend_language', $language);
         } catch (\RuntimeException $e) {
             // settings cookies isn't allowed, because this isn't a real problem we ignore the exception
         }
