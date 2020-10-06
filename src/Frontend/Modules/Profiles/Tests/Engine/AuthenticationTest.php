@@ -243,6 +243,6 @@ final class AuthenticationTest extends FrontendWebTestCase
 
     private function getDatabase(Client $client): SpoonDatabase
     {
-        return $client->getContainer()->get('database');
+        return $client->getContainer()->get(\SpoonDatabase::class);
     }
 }

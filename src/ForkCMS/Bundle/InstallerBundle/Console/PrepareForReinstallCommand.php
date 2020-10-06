@@ -45,13 +45,13 @@ class PrepareForReinstallCommand extends ContainerAwareCommand
             return self::RETURN_DID_NOT_CLEAR_DATABASE;
         }
 
-        $tables = $this->getContainer()->get('database')->getColumn(
+        $tables = $this->getContainer()->get(\SpoonDatabase::class)->getColumn(
             'SHOW TABLES'
         );
 
         if (!empty($tables)) {
-            $this->getContainer()->get('database')->execute('SET FOREIGN_KEY_CHECKS=0');
-            $this->getContainer()->get('database')->drop($tables);
+            $this->getContainer()->get(\SpoonDatabase::class)->execute('SET FOREIGN_KEY_CHECKS=0');
+            $this->getContainer()->get(\SpoonDatabase::class)->drop($tables);
         }
 
         $io->success('Removed all tables');

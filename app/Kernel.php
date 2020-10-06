@@ -167,7 +167,7 @@ abstract class Kernel extends BaseKernel
         try {
             $moduleNames = array_merge(
                 $moduleNames,
-                (array) $containerBuilder->get('database')->getColumn(
+                (array) $containerBuilder->get(\SpoonDatabase::class)->getColumn(
                     'SELECT name FROM modules'
                 )
             );

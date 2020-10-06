@@ -300,7 +300,7 @@ class ImportWordpress extends BackendBaseActionEdit
     {
         // Does someone with this username exist?
         /* @var \SpoonDatabase $database */
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
         $id = (int) $database->getVar(
             'SELECT id FROM users WHERE email=? AND active=? AND deleted=?',
             [mb_strtolower($this->authors[(string) $username]['email']), true, false]
@@ -386,7 +386,7 @@ class ImportWordpress extends BackendBaseActionEdit
     {
         // Does a category with this name exist?
         /* @var \SpoonDatabase $database */
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
         $id = (int) $database->getVar(
             'SELECT id FROM blog_categories WHERE title=? AND language=?',
             [$category, BL::getWorkingLanguage()]

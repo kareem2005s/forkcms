@@ -23,7 +23,7 @@ class Model
      */
     public static function delete(int $id): void
     {
-        BackendModel::getContainer()->get('database')->update(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->update(
             'users',
             ['active' => false, 'deleted' => true],
             'id = ?',
@@ -38,7 +38,7 @@ class Model
      */
     public static function deleteResetPasswordSettings(int $id): void
     {
-        BackendModel::getContainer()->get('database')->delete(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->delete(
             'users_settings',
             '(name = \'reset_password_key\' OR name = \'reset_password_timestamp\') AND user_id = ?',
             [$id]
@@ -55,7 +55,7 @@ class Model
     public static function emailDeletedBefore(string $email): bool
     {
         // no user to ignore
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM users AS i
              WHERE i.email = ? AND i.deleted = ?
@@ -75,7 +75,7 @@ class Model
     public static function exists(int $id, bool $active = true): bool
     {
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // if the user should also be active, there should be at least one row to return true
         if ($active) {
@@ -110,7 +110,7 @@ class Model
     public static function existsEmail(string $email, int $id = null): bool
     {
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // userid specified?
         if ($id !== null) {
@@ -136,7 +136,7 @@ class Model
     public static function get(int $id): array
     {
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // get general user data
         $user = (array) $database->getRecord(
@@ -209,7 +209,7 @@ class Model
 
     public static function getGroups(): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getPairs(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getPairs(
             'SELECT i.id, i.name
              FROM groups AS i'
         );
@@ -224,7 +224,7 @@ class Model
      */
     public static function getModuleGroupsRightsActions(string $module): array
     {
-        return (array) BackendModel::get('database')->getRecords(
+        return (array) BackendModel::get(\SpoonDatabase::class)->getRecords(
             'SELECT a.module, a.action
             FROM groups AS g
                 INNER JOIN users_groups AS u ON u.group_id = g.id
@@ -247,7 +247,7 @@ class Model
     public static function getIdByEmail(string $email)
     {
         // get user-settings
-        $userId = (int) BackendModel::getContainer()->get('database')->getVar(
+        $userId = (int) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT i.id
              FROM users AS i
              WHERE i.email = ?',
@@ -283,7 +283,7 @@ class Model
     public static function getSetting(int $userId, string $setting)
     {
         return @unserialize(
-            BackendModel::getContainer()->get('database')->getVar(
+            BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
                 'SELECT value
                  FROM users_settings
                  WHERE user_id = ? AND name = ?',
@@ -318,7 +318,7 @@ class Model
     public static function getUsers(): array
     {
         // fetch users
-        $users = (array) BackendModel::getContainer()->get('database')->getPairs(
+        $users = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getPairs(
             'SELECT i.id, s.value
              FROM users AS i
              INNER JOIN users_settings AS s ON i.id = s.user_id AND s.name = ?
@@ -338,7 +338,7 @@ class Model
     public static function insert(array $user, array $settings): int
     {
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // update user
         $userId = (int) $database->insert('users', $user);
@@ -363,7 +363,7 @@ class Model
     public static function setSetting(int $userId, string $setting, string $value): void
     {
         // insert or update
-        BackendModel::getContainer()->get('database')->execute(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->execute(
             'INSERT INTO users_settings(user_id, name, value)
              VALUES(?, ?, ?)
              ON DUPLICATE KEY UPDATE value = ?',
@@ -383,7 +383,7 @@ class Model
     public static function undoDelete(string $email): bool
     {
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // get id
         $id = $database->getVar(
@@ -416,7 +416,7 @@ class Model
     public static function update(array $user, array $settings): int
     {
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // update user
         $updated = $database->update('users', $user, 'id = ?', [$user['id']]);
@@ -447,7 +447,7 @@ class Model
         $userId = $user->getUserId();
 
         // update user
-        BackendModel::getContainer()->get('database')->update(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->update(
             'users',
             ['password' => BackendAuthentication::encryptPassword($password)],
             'id = ?',
@@ -467,7 +467,7 @@ class Model
      */
     public static function getEncryptedPassword(string $email): ?string
     {
-        return BackendModel::get('database')->getVar(
+        return BackendModel::get(\SpoonDatabase::class)->getVar(
             'SELECT password
              FROM users
              WHERE email = :email',

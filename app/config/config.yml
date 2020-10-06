@@ -46,6 +46,7 @@ services:
         public: true
     SpoonDatabase:
         class: SpoonDatabase
+        public: true
         arguments:
             - "%database.driver%"
             - "%database.host%"

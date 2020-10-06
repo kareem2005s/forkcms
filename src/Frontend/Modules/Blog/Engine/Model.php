@@ -21,7 +21,7 @@ class Model implements FrontendTagsInterface
 {
     public static function get(string $url): array
     {
-        $blogPost = (array) FrontendModel::getContainer()->get('database')->getRecord(
+        $blogPost = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT i.id, i.revision_id, i.language, i.title, i.introduction, i.text,
              c.title AS category_title, m2.url AS category_url, i.image,
              UNIX_TIMESTAMP(i.publish_on) AS publish_on, i.user_id,
@@ -45,7 +45,7 @@ class Model implements FrontendTagsInterface
 
     public static function getAll(int $limit = 10, int $offset = 0): array
     {
-        $items = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $items = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.revision_id, i.language, i.title, i.introduction, i.text, i.num_comments AS comments_count,
              c.title AS category_title, m2.url AS category_url, i.image,
              UNIX_TIMESTAMP(i.publish_on) AS publish_on, i.user_id, i.allow_comments,
@@ -124,7 +124,7 @@ class Model implements FrontendTagsInterface
 
     public static function getAllCategories(): array
     {
-        $return = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $return = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT c.id, c.title AS label, m.url, COUNT(c.id) AS total, m.data AS meta_data,
                  m.seo_follow AS meta_seo_follow, m.seo_index AS meta_seo_index
              FROM blog_categories AS c
@@ -170,7 +170,7 @@ class Model implements FrontendTagsInterface
 
     public static function getAllComments(int $limit = 10, int $offset = 0): array
     {
-        $comments = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $comments = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, UNIX_TIMESTAMP(i.createdOn) AS created_on, i.author, i.text,
              p.id AS post_id, p.title AS post_title, m.url AS post_url, i.email
              FROM blog_comments AS i
@@ -195,7 +195,7 @@ class Model implements FrontendTagsInterface
 
     public static function getAllCount(): int
     {
-        return (int) FrontendModel::getContainer()->get('database')->getVar(
+        return (int) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT COUNT(i.id) AS count
              FROM blog_posts AS i
              WHERE i.status = ? AND i.language = ? AND i.hidden = ? AND i.publish_on <= ?',
@@ -205,7 +205,7 @@ class Model implements FrontendTagsInterface
 
     public static function getAllForCategory(string $categoryUrl, int $limit = 10, int $offset = 0): array
     {
-        $items = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $items = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.revision_id, i.language, i.title, i.introduction, i.text, i.num_comments AS comments_count,
              c.title AS category_title, m2.url AS category_url, i.image,
              UNIX_TIMESTAMP(i.publish_on) AS publish_on, i.user_id, i.allow_comments,
@@ -284,7 +284,7 @@ class Model implements FrontendTagsInterface
 
     public static function getAllForCategoryCount(string $url): int
     {
-        return (int) FrontendModel::getContainer()->get('database')->getVar(
+        return (int) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT COUNT(i.id) AS count
              FROM blog_posts AS i
              INNER JOIN blog_categories AS c ON i.category_id = c.id
@@ -306,7 +306,7 @@ class Model implements FrontendTagsInterface
     public static function getAllForDateRange(int $start, int $end, int $limit = 10, int $offset = 0): array
     {
         // get the items
-        $items = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $items = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.revision_id, i.language, i.title, i.introduction, i.text, i.num_comments AS comments_count,
              c.title AS category_title, m2.url AS category_url, i.image,
              UNIX_TIMESTAMP(i.publish_on) AS publish_on, i.user_id, i.allow_comments,
@@ -391,7 +391,7 @@ class Model implements FrontendTagsInterface
     public static function getAllForDateRangeCount(int $start, int $end): int
     {
         // return the number of items
-        return (int) FrontendModel::getContainer()->get('database')->getVar(
+        return (int) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT COUNT(i.id)
              FROM blog_posts AS i
              WHERE i.status = ? AND i.language = ? AND i.hidden = ? AND i.publish_on BETWEEN ? AND ?',
@@ -413,7 +413,7 @@ class Model implements FrontendTagsInterface
     public static function getArchiveNumbers(): array
     {
         // grab stats
-        $numbers = FrontendModel::getContainer()->get('database')->getPairs(
+        $numbers = FrontendModel::getContainer()->get(\SpoonDatabase::class)->getPairs(
             'SELECT DATE_FORMAT(i.publish_on, "%Y%m") AS month, COUNT(i.id)
              FROM blog_posts AS i
              INNER JOIN meta AS m ON i.meta_id = m.id
@@ -529,7 +529,7 @@ class Model implements FrontendTagsInterface
     public static function getForTags(array $blogPostIds): array
     {
         // fetch items
-        $items = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $items = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.title, i.image, m.url
              FROM blog_posts AS i
              INNER JOIN meta AS m ON m.id = i.meta_id
@@ -587,7 +587,7 @@ class Model implements FrontendTagsInterface
     public static function getNavigation(int $blogPostId): array
     {
         // get database
-        $database = FrontendModel::getContainer()->get('database');
+        $database = FrontendModel::getContainer()->get(\SpoonDatabase::class);
 
         // get date for current item
         $date = (string) $database->getVar(
@@ -658,7 +658,7 @@ class Model implements FrontendTagsInterface
         $return = [];
 
         // get comments
-        $comments = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $comments = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT c.id, c.author, c.website, c.email, UNIX_TIMESTAMP(c.createdOn) AS created_on, c.text,
              i.id AS post_id, i.title AS post_title,
              m.url AS post_url
@@ -704,7 +704,7 @@ class Model implements FrontendTagsInterface
         $link = FrontendNavigation::getUrlForBlock('Blog', 'Detail');
 
         // get items
-        $items = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $items = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.title, m.url
              FROM blog_posts AS i
              INNER JOIN meta AS m ON i.meta_id = m.id
@@ -726,7 +726,7 @@ class Model implements FrontendTagsInterface
 
     public static function getRevision(string $url, int $revisionId): array
     {
-        $blogPost = (array) FrontendModel::getContainer()->get('database')->getRecord(
+        $blogPost = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT i.id, i.revision_id, i.language, i.title, i.introduction, i.text, i.image,
              c.title AS category_title, m2.url AS category_url, m.id AS meta_id,
              UNIX_TIMESTAMP(i.publish_on) AS publish_on, i.user_id,
@@ -792,7 +792,7 @@ class Model implements FrontendTagsInterface
      */
     public static function isModerated(string $author, string $email): bool
     {
-        return (bool) FrontendModel::getContainer()->get('database')->getVar(
+        return (bool) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM blog_comments AS c
              WHERE c.status = ? AND c.author = ? AND c.email = ?
@@ -898,7 +898,7 @@ class Model implements FrontendTagsInterface
      */
     public static function search(array $ids): array
     {
-        $items = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $items = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.title, i.introduction, i.text, m.url
              FROM blog_posts AS i
              INNER JOIN meta AS m ON i.meta_id = m.id

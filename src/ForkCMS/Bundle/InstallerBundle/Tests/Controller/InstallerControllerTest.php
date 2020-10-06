@@ -56,7 +56,7 @@ class InstallerControllerTest extends WebTestCase
         ];
 
         // make sure we have a clean slate and our parameters file is backed up
-        $this->emptyTestDatabase($container->get('database'));
+        $this->emptyTestDatabase($container->get(\SpoonDatabase::class));
 
         // recreate the client with the empty database because we need this in our installer checks
 

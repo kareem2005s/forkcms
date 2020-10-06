@@ -23,7 +23,7 @@ class DataGridDatabase extends DataGrid
     ) {
         parent::__construct(
             new \SpoonDatagridSourceDB(
-                BackendModel::get('database'),
+                BackendModel::get(\SpoonDatabase::class),
                 [$query, $parameters],
                 $resultsQuery === null ? null : [$resultsQuery, $resultsParameters]
             )

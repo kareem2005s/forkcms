@@ -142,7 +142,7 @@ class User
     public function loadUser(int $userId): void
     {
         // get database instance
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // get user-data
         $userData = (array) $database->getRecord(
@@ -191,7 +191,7 @@ class User
 
     private function loadGroups(): void
     {
-        $this->groups = (array) BackendModel::get('database')->getColumn(
+        $this->groups = (array) BackendModel::get(\SpoonDatabase::class)->getColumn(
             'SELECT group_id
              FROM users_groups
              WHERE user_id = ?',
@@ -206,7 +206,7 @@ class User
 
     public function loadUserByEmail(string $email): void
     {
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         $userId = (int) $database->getVar(
             'SELECT u.id
@@ -230,7 +230,7 @@ class User
         $valueToStore = serialize($value);
 
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // store
         $database->execute(

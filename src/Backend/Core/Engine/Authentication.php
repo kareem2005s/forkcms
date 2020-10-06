@@ -56,7 +56,7 @@ class Authentication
     public static function cleanupOldSessions(): void
     {
         // remove all sessions that are invalid (older then 30 min)
-        BackendModel::get('database')->delete('users_sessions', 'date <= DATE_SUB(NOW(), INTERVAL 30 MINUTE)');
+        BackendModel::get(\SpoonDatabase::class)->delete('users_sessions', 'date <= DATE_SUB(NOW(), INTERVAL 30 MINUTE)');
     }
 
     /**
@@ -121,7 +121,7 @@ class Authentication
             return self::$allowedActions;
         }
 
-        $allowedActionsRows = (array) BackendModel::get('database')->getRecords(
+        $allowedActionsRows = (array) BackendModel::get(\SpoonDatabase::class)->getRecords(
             'SELECT gra.module, gra.action, MAX(gra.level) AS level
             FROM users_sessions AS us
             INNER JOIN users AS u ON us.user_id = u.id
@@ -228,7 +228,7 @@ class Authentication
 
         // do we already know something?
         if (empty(self::$allowedModules)) {
-            $database = BackendModel::get('database');
+            $database = BackendModel::get(\SpoonDatabase::class);
 
             // get allowed modules
             $allowedModules = (array) $database->getColumn(
@@ -268,7 +268,7 @@ class Authentication
             return false;
         }
 
-        $database = BackendModel::get('database');
+        $database = BackendModel::get(\SpoonDatabase::class);
 
         // get the row from the tables
         $sessionData = $database->getRecord(
@@ -316,7 +316,7 @@ class Authentication
     {
         self::$alreadyLoggedOut = false;
 
-        $database = BackendModel::get('database');
+        $database = BackendModel::get(\SpoonDatabase::class);
 
         // check password
         if (!static::verifyPassword($login, $password)) {
@@ -376,7 +376,7 @@ class Authentication
         }
 
         // remove all rows owned by the current user
-        BackendModel::get('database')->delete('users_sessions', 'session_id = ?', BackendModel::getSession()->getId());
+        BackendModel::get(\SpoonDatabase::class)->delete('users_sessions', 'session_id = ?', BackendModel::getSession()->getId());
 
         // reset values. We can't destroy the session because session-data can be used on the site.
         BackendModel::getSession()->set('backend_logged_in', false);

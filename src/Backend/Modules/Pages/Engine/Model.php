@@ -61,7 +61,7 @@ class Model
         static $cacheBuilder = null;
         if ($cacheBuilder === null) {
             $cacheBuilder = new CacheBuilder(
-                BackendModel::get('database'),
+                BackendModel::get(\SpoonDatabase::class),
                 BackendModel::get('cache.pool'),
                 BackendModel::get(ModuleExtraRepository::class)
             );
@@ -219,7 +219,7 @@ class Model
     public static function getByTag(int $tagId): array
     {
         // get the items
-        $items = (array) BackendModel::getContainer()->get('database')->getRecords(
+        $items = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id AS url, i.title AS name, mt.moduleName AS module
              FROM TagsModuleTag AS mt
              INNER JOIN TagsTag AS t ON mt.tag_id = t.id AND mt.moduleName = ? AND mt.tag_id = ?

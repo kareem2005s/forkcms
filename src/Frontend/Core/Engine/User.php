@@ -104,7 +104,7 @@ class User
     public function loadUser(int $userId): void
     {
         // get database instance
-        $database = Model::getContainer()->get('database');
+        $database = Model::getContainer()->get(\SpoonDatabase::class);
 
         // get user-data
         $userData = (array) $database->getRecord(

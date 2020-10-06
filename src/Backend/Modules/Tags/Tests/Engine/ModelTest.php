@@ -49,7 +49,7 @@ final class ModelTest extends BackendWebTestCase
     {
         $name = 'inserted';
         $tagId = TagsModel::insert($name);
-        $database = $client->getContainer()->get('database');
+        $database = $client->getContainer()->get(\SpoonDatabase::class);
         self::assertSame(
             $tagId,
             (int) $database->getVar(
@@ -64,7 +64,7 @@ final class ModelTest extends BackendWebTestCase
         $name = 'inserted';
         $language = 'nl';
         $tagId = TagsModel::insert($name, $language);
-        $database = $client->getContainer()->get('database');
+        $database = $client->getContainer()->get(\SpoonDatabase::class);
         self::assertSame(
             $tagId,
             (int) $database->getVar(
@@ -130,7 +130,7 @@ final class ModelTest extends BackendWebTestCase
 
     public function testSaveTagsUpdatesTheUsedCount(Client $client): void
     {
-        $database = $client->getContainer()->get('database');
+        $database = $client->getContainer()->get(\SpoonDatabase::class);
         $tagCount = static function (int $id) use ($database): int {
             return $database->getVar('SELECT numberOfTimesLinked FROM TagsTag WHERE id = ?', $id);
         };

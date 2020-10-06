@@ -164,7 +164,7 @@ class Model
         $idPlaceHolders = implode(', ', array_fill(0, count($ids), '?'));
 
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // get used meta ids
         $metaIds = (array) $database->getColumn(
@@ -224,7 +224,7 @@ class Model
      */
     public static function deleteCategoryAllowed(int $id): bool
     {
-        return !(bool) BackendModel::getContainer()->get('database')->getVar(
+        return !(bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM blog_posts AS i
              WHERE i.category_id = ? AND i.language = ? AND i.status = ?
@@ -289,7 +289,7 @@ class Model
      */
     public static function exists(int $id): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT i.id
              FROM blog_posts AS i
              WHERE i.id = ? AND i.language = ?',
@@ -319,7 +319,7 @@ class Model
      */
     public static function get(int $id): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecord(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT i.*, UNIX_TIMESTAMP(i.publish_on) AS publish_on, UNIX_TIMESTAMP(i.created_on) AS created_on, UNIX_TIMESTAMP(i.edited_on) AS edited_on, m.url
              FROM blog_posts AS i
              INNER JOIN meta AS m ON m.id = i.meta_id
@@ -340,7 +340,7 @@ class Model
      */
     public static function getAllCommentsForStatus(string $status, int $limit = 30, int $offset = 0): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecords(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT DISTINCT i.id, UNIX_TIMESTAMP(i.createdOn) AS created_on, i.author, i.email, i.website, i.text, i.type, i.status,
              p.id AS post_id, p.title AS post_title, m.url AS post_url, p.language AS post_language
              FROM blog_comments AS i
@@ -360,7 +360,7 @@ class Model
      */
     public static function getByTag(int $tagId): array
     {
-        $items = (array) BackendModel::getContainer()->get('database')->getRecords(
+        $items = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id AS url, i.title AS name, mt.moduleName AS module
              FROM TagsModuleTag AS mt
              INNER JOIN TagsTag AS t ON mt.tag_id = t.id
@@ -385,7 +385,7 @@ class Model
      */
     public static function getCategories(bool $includeCount = false): array
     {
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         if ($includeCount) {
             return (array) $database->getPairs(
@@ -454,7 +454,7 @@ class Model
         // I know this is dirty, but as we don't have full entities yet we
         // need to fetch the post separately and inject it into the comment
         // @todo: fix this when there is a POST entity
-        $postData = (array) BackendModel::getContainer()->get('database')
+        $postData = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)
             ->getRecord(
                 'SELECT p.id AS post_id, p.title AS post_title, m.url AS post_url
                  FROM blog_posts AS p
@@ -506,7 +506,7 @@ class Model
      */
     public static function getLatestComments(string $status, int $limit = 10): array
     {
-        $comments = (array) BackendModel::getContainer()->get('database')->getRecords(
+        $comments = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.author, i.text, UNIX_TIMESTAMP(i.createdOn) AS created_on,
              p.title, p.language, m.url
              FROM blog_comments AS i
@@ -535,7 +535,7 @@ class Model
      */
     public static function getMaximumId(): int
     {
-        return (int) BackendModel::getContainer()->get('database')->getVar('SELECT MAX(id) FROM blog_posts LIMIT 1');
+        return (int) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar('SELECT MAX(id) FROM blog_posts LIMIT 1');
     }
 
     /**
@@ -547,7 +547,7 @@ class Model
      */
     public static function getRevision(int $id, int $revisionId): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecord(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT i.*, UNIX_TIMESTAMP(i.publish_on) AS publish_on, UNIX_TIMESTAMP(i.created_on) AS created_on, UNIX_TIMESTAMP(i.edited_on) AS edited_on, m.url
              FROM blog_posts AS i
              INNER JOIN meta AS m ON m.id = i.meta_id
@@ -568,7 +568,7 @@ class Model
         $url = (string) $url;
 
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // new item
         if ($id === null) {
@@ -622,7 +622,7 @@ class Model
     public static function insert(array $item): int
     {
         // insert and return the new revision id
-        $item['revision_id'] = BackendModel::getContainer()->get('database')->insert('blog_posts', $item);
+        $item['revision_id'] = BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('blog_posts', $item);
 
         // return the new revision id
         return $item['revision_id'];
@@ -725,7 +725,7 @@ class Model
         }
 
         // Write meta to database
-        $item['meta_id'] = BackendModel::getContainer()->get('database')->insert('meta', $meta);
+        $item['meta_id'] = BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('meta', $meta);
 
         // Write post to database
         $item['revision_id'] = self::insert($item);
@@ -844,7 +844,7 @@ class Model
         $ids = array_unique($ids);
 
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // get counts
         $commentCounts = (array) $database->getPairs(
@@ -880,7 +880,7 @@ class Model
      */
     public static function update(array $item): int
     {
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // get the record of the exact item we're editing
         $revision = self::getRevision($item['id'], $item['revision_id']);
@@ -977,7 +977,7 @@ class Model
         }
 
         // insert new version
-        $item['revision_id'] = BackendModel::getContainer()->get('database')->insert('blog_posts', $item);
+        $item['revision_id'] = BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('blog_posts', $item);
 
         // return the new revision id
         return $item['revision_id'];
@@ -1070,7 +1070,7 @@ class Model
      */
     public static function updateRevision($revision_id, $item): void
     {
-        BackendModel::getContainer()->get('database')->update(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->update(
             'blog_posts',
             $item,
             'revision_id = ?',

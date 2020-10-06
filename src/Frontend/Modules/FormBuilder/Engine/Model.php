@@ -12,7 +12,7 @@ class Model
     public static function get(string $id): array
     {
         // get form
-        $form = (array) FrontendModel::getContainer()->get('database')->getRecord(
+        $form = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT i.id, i.email_subject, i.email_template, i.language, i.method, i.name, i.email,
                     i.success_type, i.success_message, i.success_page, i.identifier
              FROM forms AS i
@@ -34,7 +34,7 @@ class Model
     public static function getFields(int $formId): array
     {
         // get fields
-        $fields = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $fields = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.type, i.settings
              FROM forms_fields AS i
              WHERE i.form_id = ?
@@ -51,7 +51,7 @@ class Model
         $idPlaceHolders = array_fill(0, count($fields), '?');
 
         // get field validations, each field can have multiple 'type' validations
-        $fieldValidations = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $fieldValidations = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.field_id, i.type, i.parameter, i.error_message
              FROM forms_fields_validation AS i
              WHERE i.field_id IN (' . implode(', ', $idPlaceHolders) . ')',
@@ -80,12 +80,12 @@ class Model
 
     public static function insertData(array $formData): int
     {
-        return FrontendModel::getContainer()->get('database')->insert('forms_data', $formData);
+        return FrontendModel::getContainer()->get(\SpoonDatabase::class)->insert('forms_data', $formData);
     }
 
     public static function insertDataField(array $dataField): int
     {
-        return FrontendModel::getContainer()->get('database')->insert('forms_data_fields', $dataField);
+        return FrontendModel::getContainer()->get(\SpoonDatabase::class)->insert('forms_data_fields', $dataField);
     }
 
     /**

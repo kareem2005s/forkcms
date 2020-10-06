@@ -112,7 +112,7 @@ class Model
         $idPlaceHolders = array_fill(0, count($ids), '?');
 
         // delete records
-        BackendModel::getContainer()->get('database')->delete(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->delete(
             'locale',
             'id IN (' . implode(', ', $idPlaceHolders) . ')',
             $ids
@@ -125,7 +125,7 @@ class Model
 
     public static function exists(int $id): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM locale
              WHERE id = ?
@@ -143,7 +143,7 @@ class Model
         int $excludedId = null
     ): bool {
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // return
         if ($excludedId !== null) {
@@ -156,7 +156,7 @@ class Model
             );
         }
 
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM locale
              WHERE name = ? AND type = ? AND module = ? AND language = ? AND application = ?
@@ -168,7 +168,7 @@ class Model
     public static function get(int $id): array
     {
         // fetch record from database
-        $record = (array) BackendModel::getContainer()->get('database')->getRecord(
+        $record = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT * FROM locale WHERE id = ?',
             [$id]
         );
@@ -188,7 +188,7 @@ class Model
         string $language,
         string $application
     ): int {
-        return BackendModel::getContainer()->get('database')->getVar(
+        return BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT l.id
              FROM locale AS l
              WHERE name = ? AND type = ? AND module = ? AND language = ? AND application = ?',
@@ -239,7 +239,7 @@ class Model
         }
 
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // build the query
         $query =
@@ -442,7 +442,7 @@ class Model
         }
 
         // get database instance
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // possible values
         $possibleApplications = ['Frontend', 'Backend'];
@@ -578,7 +578,7 @@ class Model
         }
 
         // insert item
-        $item['id'] = (int) BackendModel::getContainer()->get('database')->insert('locale', $item);
+        $item['id'] = (int) BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('locale', $item);
 
         // rebuild the cache
         self::buildCache($item['language'], $item['application']);
@@ -597,7 +597,7 @@ class Model
         }
 
         // update category
-        $updated = BackendModel::getContainer()->get('database')->update('locale', $item, 'id = ?', [$item['id']]);
+        $updated = BackendModel::getContainer()->get(\SpoonDatabase::class)->update('locale', $item, 'id = ?', [$item['id']]);
 
         // rebuild the cache
         self::buildCache($item['language'], $item['application']);

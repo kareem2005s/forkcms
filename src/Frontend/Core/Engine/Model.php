@@ -154,7 +154,7 @@ class Model extends \Common\Core\Model
     {
         $currentDateTime = (new DateTime())->format('Y-m-d H:i:00');
 
-        $pageRevision = (array) self::getContainer()->get('database')->getRecord(
+        $pageRevision = (array) self::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT p.id, p.parent_id, p.revision_id, p.template_id, p.title, p.navigation_title,
                  p.navigation_title_overwrite, p.data, p.hidden,
                  m.title AS meta_title, m.title_overwrite AS meta_title_overwrite,
@@ -215,7 +215,7 @@ class Model extends \Common\Core\Model
         }
 
         // get blocks
-        $blocks = (array) self::getContainer()->get('database')->getRecords(
+        $blocks = (array) self::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT pe.id AS extra_id, pb.html, pb.position,
              pe.module AS extra_module, pe.type AS extra_type, pe.action AS extra_action, pe.data AS extra_data
              FROM PagesPageBlock AS pb

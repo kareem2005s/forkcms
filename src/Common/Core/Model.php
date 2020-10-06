@@ -245,7 +245,7 @@ class Model extends BaseModel
         }
 
         // get all modules
-        $modules = (array) self::getContainer()->get('database')->getColumn('SELECT m.name FROM modules AS m');
+        $modules = (array) self::getContainer()->get(\SpoonDatabase::class)->getColumn('SELECT m.name FROM modules AS m');
 
         // add modules to the cache
         foreach ($modules as $module) {

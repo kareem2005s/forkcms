@@ -161,7 +161,7 @@ class ExportData extends BackendBaseAction
         list($query, $parameters) = $this->buildQuery();
 
         // get the data
-        $records = (array) $this->get('database')->getRecords($query, $parameters);
+        $records = (array) $this->get(\SpoonDatabase::class)->getRecords($query, $parameters);
         $data = [];
 
         // reformat data

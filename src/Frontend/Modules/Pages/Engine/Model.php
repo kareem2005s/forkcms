@@ -26,7 +26,7 @@ class Model implements FrontendTagsInterface
     public static function getForTags(array $ids): array
     {
         // fetch items
-        $items = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $items = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.title
              FROM PagesPage AS i
              INNER JOIN meta AS m ON m.id = i.meta_id
@@ -81,7 +81,7 @@ class Model implements FrontendTagsInterface
     public static function getSubpages(int $id): array
     {
         // fetch items
-        $items = (array) FrontendModel::getContainer()->get('database')->getRecords(
+        $items = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.title, m.description, i.parent_id, i.data
              FROM PagesPage AS i
              INNER JOIN meta AS m ON m.id = i.meta_id
@@ -129,7 +129,7 @@ class Model implements FrontendTagsInterface
     public static function search(array $ids): array
     {
         // get database
-        $database = FrontendModel::getContainer()->get('database');
+        $database = FrontendModel::getContainer()->get(\SpoonDatabase::class);
 
         // define ids to ignore
         $ignore = [Page::ERROR_PAGE_ID];

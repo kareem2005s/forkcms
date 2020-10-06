@@ -343,7 +343,7 @@ class Meta
     {
         $this->id = $id;
 
-        $this->data = (array) BackendModel::getContainer()->get('database')->getRecord(
+        $this->data = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT *
              FROM meta AS m
              WHERE m.id = ?',
@@ -387,7 +387,7 @@ class Meta
         }
 
         // build meta
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         if ($this->id !== null && $update === true) {
             $database->update('meta', $this->data, 'id = ?', [$this->id]);

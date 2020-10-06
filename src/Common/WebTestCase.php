@@ -110,20 +110,20 @@ abstract class WebTestCase extends BaseWebTestCase
 
     protected function resetDataBase(Client $client): void
     {
-        $database = $client->getContainer()->get('database');
+        $database = $client->getContainer()->get(\SpoonDatabase::class);
 
         // make sure our database has a clean state (freshly installed Fork)
         $this->emptyTestDatabase($database);
         $kernelDir = $client->getContainer()->getParameter('kernel.project_dir') . '/app';
         $this->importSQL(
-            $client->getContainer()->get('database'),
+            $client->getContainer()->get(\SpoonDatabase::class),
             file_get_contents($kernelDir . '/../tests/data/test_db.sql')
         );
     }
 
     protected function loadFixtures(Client $client, array $fixtureClasses = []): void
     {
-        $database = $client->getContainer()->get('database');
+        $database = $client->getContainer()->get(\SpoonDatabase::class);
 
         // load all the fixtures
         foreach ($fixtureClasses as $class) {

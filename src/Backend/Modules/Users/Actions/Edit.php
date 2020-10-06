@@ -301,7 +301,7 @@ class Edit extends BackendBaseActionEdit
                 // user is now de-activated, we now remove all sessions for this user so he is logged out immediately
                 if (isset($user['active']) && !$user['active'] && $this->record['active'] !== $user['active']) {
                     // delete all sessions for user
-                    BackendModel::get('database')->delete(
+                    BackendModel::get(\SpoonDatabase::class)->delete(
                         'users_sessions',
                         'user_id = ?',
                         [

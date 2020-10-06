@@ -150,7 +150,7 @@ class Model
      */
     public static function getByTag(int $tagId): array
     {
-        $questionIds = (array) BackendModel::get('database')->getColumn(
+        $questionIds = (array) BackendModel::get(\SpoonDatabase::class)->getColumn(
             'SELECT moduleId
              FROM TagsModuleTag AS t
              WHERE t.tag_id = :tagId
@@ -302,7 +302,7 @@ class Model
     {
         // insert the meta if possible
         if ($meta !== null) {
-            $item['meta_id'] = BackendModel::get('database')->insert('meta', $meta);
+            $item['meta_id'] = BackendModel::get(\SpoonDatabase::class)->insert('meta', $meta);
         }
 
         // insert extra

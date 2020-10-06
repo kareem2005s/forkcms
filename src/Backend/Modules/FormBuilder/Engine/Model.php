@@ -74,7 +74,7 @@ class Model
     public static function createIdentifier(): string
     {
         // get last id
-        $id = (int) BackendModel::getContainer()->get('database')->getVar(
+        $id = (int) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT i.id FROM forms AS i ORDER BY i.id DESC LIMIT 1'
         );
 
@@ -94,7 +94,7 @@ class Model
      */
     private static function identifierExist(string $identifier): bool
     {
-        return (int) BackendModel::getContainer()->get('database')
+        return (int) BackendModel::getContainer()->get(\SpoonDatabase::class)
                 ->getVar(
                     'SELECT 1
                  FROM forms AS i
@@ -111,7 +111,7 @@ class Model
      */
     public static function delete(int $id): void
     {
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // get field ids
         $fieldIds = (array) $database->getColumn('SELECT i.id FROM forms_fields AS i WHERE i.form_id = ?', $id);
@@ -145,7 +145,7 @@ class Model
      */
     public static function deleteData(array $ids): void
     {
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         $database->delete('forms_data', 'id IN(' . implode(',', $ids) . ')');
         $database->delete('forms_data_fields', 'data_id IN(' . implode(',', $ids) . ')');
@@ -162,7 +162,7 @@ class Model
         self::deleteFieldValidation($id);
 
         // delete field
-        BackendModel::getContainer()->get('database')->delete('forms_fields', 'id = ?', $id);
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->delete('forms_fields', 'id = ?', $id);
     }
 
     /**
@@ -172,7 +172,7 @@ class Model
      */
     public static function deleteFieldValidation(int $id): void
     {
-        BackendModel::getContainer()->get('database')->delete('forms_fields_validation', 'field_id = ?', $id);
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->delete('forms_fields_validation', 'field_id = ?', $id);
     }
 
     /**
@@ -184,7 +184,7 @@ class Model
      */
     public static function exists(int $id): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM forms AS f
              WHERE f.id = ?
@@ -202,7 +202,7 @@ class Model
      */
     public static function existsData(int $id): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM forms_data AS fd
              WHERE fd.id = ?
@@ -223,7 +223,7 @@ class Model
     {
         // exists
         if ($formId === null) {
-            return (bool) BackendModel::getContainer()->get('database')->getVar(
+            return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
                 'SELECT 1
                  FROM forms_fields AS ff
                  WHERE ff.id = ?
@@ -233,7 +233,7 @@ class Model
         }
 
         // exists and ignore an id
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM forms_fields AS ff
              WHERE ff.id = ? AND ff.form_id = ?
@@ -254,7 +254,7 @@ class Model
     {
         // exists
         if ($ignoreId === null) {
-            return (bool) BackendModel::getContainer()->get('database')->getVar(
+            return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
                 'SELECT 1
                  FROM forms AS f
                  WHERE f.identifier = ?
@@ -264,7 +264,7 @@ class Model
         }
 
         // exists and ignore an id
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM forms AS f
              WHERE f.identifier = ? AND f.id != ?
@@ -294,7 +294,7 @@ class Model
      */
     public static function get(int $id): array
     {
-        $return = (array) BackendModel::getContainer()->get('database')->getRecord(
+        $return = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT f.* FROM forms AS f WHERE f.id = ?',
             $id
         );
@@ -317,7 +317,7 @@ class Model
     public static function getData(int $id): array
     {
         // get data
-        $data = (array) BackendModel::getContainer()->get('database')->getRecord(
+        $data = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT fd.id, fd.form_id, UNIX_TIMESTAMP(fd.sent_on) AS sent_on
              FROM forms_data AS fd
              WHERE fd.id = ?',
@@ -325,7 +325,7 @@ class Model
         );
 
         // get fields
-        $data['fields'] = (array) BackendModel::getContainer()->get('database')->getRecords(
+        $data['fields'] = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT fdf.label, fdf.value
              FROM forms_data_fields AS fdf
              WHERE fdf.data_id = ?
@@ -383,7 +383,7 @@ class Model
      */
     public static function getField(int $id): array
     {
-        $field = (array) BackendModel::getContainer()->get('database')->getRecord(
+        $field = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT ff.id, ff.form_id, ff.type, ff.settings
              FROM forms_fields AS ff
              WHERE ff.id = ?',
@@ -396,7 +396,7 @@ class Model
         }
 
         // get validation
-        $field['validations'] = (array) BackendModel::getContainer()->get('database')->getRecords(
+        $field['validations'] = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT ffv.type, ffv.parameter, ffv.error_message
              FROM forms_fields_validation AS ffv
              WHERE ffv.field_id = ?',
@@ -416,7 +416,7 @@ class Model
      */
     public static function getFields(int $id): array
     {
-        $fields = (array) BackendModel::getContainer()->get('database')->getRecords(
+        $fields = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT ff.id, ff.type, ff.settings
              FROM forms_fields AS ff
              WHERE ff.form_id = ?
@@ -431,7 +431,7 @@ class Model
             }
 
             // get validation
-            $field['validations'] = (array) BackendModel::getContainer()->get('database')->getRecords(
+            $field['validations'] = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
                 'SELECT ffv.type, ffv.parameter, ffv.error_message
                  FROM forms_fields_validation AS ffv
                  WHERE ffv.field_id = ?',
@@ -472,7 +472,7 @@ class Model
      */
     public static function getMaximumSequence(int $formId): int
     {
-        return (int) BackendModel::getContainer()->get('database')->getVar(
+        return (int) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT MAX(ff.sequence)
              FROM forms_fields AS ff
              WHERE ff.form_id = ?',
@@ -490,7 +490,7 @@ class Model
     public static function insert(array $values): int
     {
         // define form id
-        $formId = BackendModel::getContainer()->get('database')->insert('forms', $values);
+        $formId = BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('forms', $values);
 
         // insert extra
         BackendModel::insertExtra(
@@ -520,7 +520,7 @@ class Model
      */
     public static function insertField(array $values): int
     {
-        return BackendModel::getContainer()->get('database')->insert('forms_fields', $values);
+        return BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('forms_fields', $values);
     }
 
     /**
@@ -532,7 +532,7 @@ class Model
      */
     public static function insertFieldValidation(array $values): int
     {
-        return BackendModel::getContainer()->get('database')->insert('forms_fields_validation', $values);
+        return BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('forms_fields_validation', $values);
     }
 
     /**
@@ -545,7 +545,7 @@ class Model
      */
     public static function update(int $id, array $values): int
     {
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // update item
         $database->update('forms', $values, 'id = ?', $id);
@@ -579,7 +579,7 @@ class Model
      */
     public static function updateField(int $id, array $values): int
     {
-        BackendModel::getContainer()->get('database')->update('forms_fields', $values, 'id = ?', $id);
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->update('forms_fields', $values, 'id = ?', $id);
 
         return $id;
     }

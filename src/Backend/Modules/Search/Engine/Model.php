@@ -24,7 +24,7 @@ class Model
     public static function deleteSynonym(int $synonymId): void
     {
         // delete synonym
-        BackendModel::getContainer()->get('database')->delete('search_synonyms', 'id = ?', [$synonymId]);
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->delete('search_synonyms', 'id = ?', [$synonymId]);
 
         // invalidate the cache for search
         self::invalidateCache();
@@ -32,7 +32,7 @@ class Model
 
     public static function existsSynonymById(int $id): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM search_synonyms
              WHERE id = ?
@@ -44,7 +44,7 @@ class Model
     public static function existsSynonymByTerm(string $searchTerm, int $excludedId = null): bool
     {
         if ($excludedId === null) {
-            return (bool) BackendModel::getContainer()->get('database')->getVar(
+            return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
                 'SELECT 1
                  FROM search_synonyms
                  WHERE term = ?
@@ -53,7 +53,7 @@ class Model
             );
         }
 
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM search_synonyms
              WHERE term = ? AND id != ?
@@ -64,7 +64,7 @@ class Model
 
     public static function getModuleSettings(): array
     {
-        return BackendModel::getContainer()->get('database')->getRecords(
+        return BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT module, searchable, weight
              FROM search_modules',
             [],
@@ -74,7 +74,7 @@ class Model
 
     public static function getSynonym(int $synonymId): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecord(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT *
              FROM search_synonyms
              WHERE id = ?',
@@ -92,7 +92,7 @@ class Model
     public static function insertModuleSettings(string $module, string $searchable, string $weight): void
     {
         // insert or update
-        BackendModel::getContainer()->get('database')->execute(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->execute(
             'INSERT INTO search_modules (module, searchable, weight)
              VALUES (?, ?, ?)
              ON DUPLICATE KEY UPDATE searchable = ?, weight = ?',
@@ -106,7 +106,7 @@ class Model
     public static function insertSynonym(array $synonym): int
     {
         // insert into database
-        $id = BackendModel::getContainer()->get('database')->insert('search_synonyms', $synonym);
+        $id = BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('search_synonyms', $synonym);
 
         // invalidate the cache for search
         self::invalidateCache();
@@ -140,7 +140,7 @@ class Model
         }
 
         // delete indexes
-        BackendModel::getContainer()->get('database')->delete(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->delete(
             'search_index',
             'module = ? AND other_id = ? AND language = ?',
             [$module, $otherId, $language ?? BL::getWorkingLanguage()]
@@ -170,7 +170,7 @@ class Model
         $language = $language ?? BL::getWorkingLanguage();
 
         // get database
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         // insert search index
         foreach ($fields as $field => $value) {
@@ -192,7 +192,7 @@ class Model
 
     public static function removeIndexByModuleAndLanguage(string $module, string $language): void
     {
-        BackendModel::getContainer()->get('database')->delete(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->delete(
             'search_index',
             'module = ? AND language = ?',
             [$module, $language]
@@ -205,7 +205,7 @@ class Model
     public static function updateSynonym(array $synonym): void
     {
         // update
-        BackendModel::getContainer()->get('database')->update(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->update(
             'search_synonyms',
             $synonym,
             'id = ?',

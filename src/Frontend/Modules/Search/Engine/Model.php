@@ -180,7 +180,7 @@ class Model
      */
     private static function getForShortTerm(string $term, int $limit = 20, int $offset = 0): array
     {
-        return (array) FrontendModel::getContainer()->get('database')->getRecords(
+        return (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.module, i.other_id, COUNT(*) AS score
              FROM search_index AS i
              INNER JOIN search_modules AS m ON i.module = m.module
@@ -208,7 +208,7 @@ class Model
             $parameters['language'] = $language;
         }
 
-        return (array) FrontendModel::getContainer()->get('database')->getRecords(
+        return (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT s1.term, s1.num_results
              FROM search_statistics AS s1
              INNER JOIN
@@ -228,14 +228,14 @@ class Model
     public static function getSynonyms(string $term): array
     {
         // query database for synonyms
-        $synonyms = FrontendModel::getContainer()->get('database')->getVar(
+        $synonyms = FrontendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT synonym
              FROM search_synonyms
              WHERE term = ?',
             [$term]
         );
         if (!$synonyms) {
-            $synonyms = (array) FrontendModel::getContainer()->get('database')->getColumn(
+            $synonyms = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getColumn(
                 'SELECT term FROM search_synonyms
                  WHERE synonym LIKE ? OR synonym LIKE ? OR synonym LIKE ? OR synonym = ?',
                 ["$term,%", "%,$term", "%,$term,%", $term]
@@ -359,7 +359,7 @@ class Model
         }
 
         // get the search results
-        return (int) FrontendModel::getContainer()->get('database')->getVar(
+        return (int) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             $query,
             $params
         );
@@ -367,7 +367,7 @@ class Model
 
     public static function save(array $item): void
     {
-        FrontendModel::getContainer()->get('database')->insert(
+        FrontendModel::getContainer()->get(\SpoonDatabase::class)->insert(
             'search_statistics',
             $item
         );
@@ -486,7 +486,7 @@ class Model
     public static function statusIndex(string $module, array $otherIds, bool $active = true): void
     {
         if (!empty($otherIds)) {
-            FrontendModel::getContainer()->get('database')->update(
+            FrontendModel::getContainer()->get(\SpoonDatabase::class)->update(
                 'search_index',
                 ['active' => $active],
                 'module = ? AND other_id IN (' . implode(',', $otherIds) . ')',
@@ -506,7 +506,7 @@ class Model
 
         while (1) {
             // get the inactive indices
-            $searchResults = (array) FrontendModel::getContainer()->get('database')->getRecords(
+            $searchResults = (array) FrontendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
                 'SELECT module, other_id
                 FROM search_index
                 WHERE language = ? AND active = ?

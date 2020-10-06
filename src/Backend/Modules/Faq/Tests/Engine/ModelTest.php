@@ -90,7 +90,7 @@ final class ModelTest extends BackendWebTestCase
         ];
 
         // update meta, there doesn't seems to be a function for this?
-        $client->getContainer()->get('database')->update('meta', $categoryMetaData, 'id = ?', [$categoryMetaData['id']]);
+        $client->getContainer()->get(\SpoonDatabase::class)->update('meta', $categoryMetaData, 'id = ?', [$categoryMetaData['id']]);
 
         Model::updateCategory($categoryData);
 

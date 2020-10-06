@@ -26,7 +26,7 @@ class Model
     {
         foreach ((array) $actionPermissions as $permission) {
             if (!self::existsActionPermission($permission)) {
-                BackendModel::getContainer()->get('database')->insert('groups_rights_actions', $permission);
+                BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('groups_rights_actions', $permission);
             }
         }
     }
@@ -35,14 +35,14 @@ class Model
     {
         foreach ((array) $modulePermissions as $permission) {
             if (!self::existsModulePermission($permission)) {
-                BackendModel::getContainer()->get('database')->insert('groups_rights_modules', $permission);
+                BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('groups_rights_modules', $permission);
             }
         }
     }
 
     public static function alreadyExists(string $groupName): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT i.*
              FROM groups AS i
              WHERE i.name = ?',
@@ -53,7 +53,7 @@ class Model
     public static function delete(int $groupId): void
     {
         /** @var SpoonDatabase $database */
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         $database->delete('groups', 'id = ?', [$groupId]);
         $database->delete('groups_settings', 'group_id = ?', [$groupId]);
@@ -65,7 +65,7 @@ class Model
     {
         foreach ((array) $actionPermissions as $permission) {
             if (self::existsActionPermission($permission)) {
-                BackendModel::getContainer()->get('database')->delete(
+                BackendModel::getContainer()->get(\SpoonDatabase::class)->delete(
                     'groups_rights_actions',
                     'group_id = ? AND module = ? AND action = ?',
                     [$permission['group_id'], $permission['module'], $permission['action']]
@@ -78,7 +78,7 @@ class Model
     {
         foreach ((array) $modulePermissions as $permission) {
             if (self::existsModulePermission($permission)) {
-                BackendModel::getContainer()->get('database')->delete(
+                BackendModel::getContainer()->get(\SpoonDatabase::class)->delete(
                     'groups_rights_modules',
                     'group_id = ? AND module = ?',
                     [$permission['group_id'], $permission['module']]
@@ -89,7 +89,7 @@ class Model
 
     public static function deleteMultipleGroups(int $userId): void
     {
-        BackendModel::getContainer()->get('database')->delete('users_groups', 'user_id = ?', [$userId]);
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->delete('users_groups', 'user_id = ?', [$userId]);
     }
 
     /**
@@ -101,7 +101,7 @@ class Model
      */
     public static function exists(int $id): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT i.*
              FROM groups AS i
              WHERE i.id = ?',
@@ -111,7 +111,7 @@ class Model
 
     public static function existsActionPermission(array $permission): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT i.*
              FROM groups_rights_actions AS i
              WHERE i.module = ? AND i.group_id = ? AND i.action = ?',
@@ -121,7 +121,7 @@ class Model
 
     public static function existsModulePermission(array $permission): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT i.*
              FROM groups_rights_modules AS i
              WHERE i.module = ? AND i.group_id = ?',
@@ -131,7 +131,7 @@ class Model
 
     public static function get(int $groupId): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecord(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT i.*
              FROM groups AS i
              WHERE i.id = ?',
@@ -141,7 +141,7 @@ class Model
 
     public static function getActionPermissions(int $groupId): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecords(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.module, i.action
              FROM groups_rights_actions AS i
              WHERE i.group_id = ?',
@@ -151,14 +151,14 @@ class Model
 
     public static function getAll(): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecords(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id AS value, i.name AS label FROM groups AS i'
         );
     }
 
     public static function getGroupsByUser(int $userId): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecords(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.name
              FROM groups AS i
              INNER JOIN users_groups AS ug ON i.id = ug.group_id
@@ -182,7 +182,7 @@ class Model
 
     public static function getModulePermissions(int $groupId): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecords(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.*
              FROM groups_rights_modules AS i
              WHERE i.group_id = ?',
@@ -192,7 +192,7 @@ class Model
 
     public static function getSetting(int $groupId, string $settingName): array
     {
-        $setting = (array) BackendModel::getContainer()->get('database')->getRecord(
+        $setting = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT i.value
              FROM groups_settings AS i
              WHERE i.group_id = ? AND i.name = ?',
@@ -212,7 +212,7 @@ class Model
 
     public static function getUsers(int $groupId): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecords(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.*
              FROM users AS i
              INNER JOIN users_groups AS ug ON i.id = ug.user_id
@@ -232,7 +232,7 @@ class Model
     public static function insert(array $group, array $setting): int
     {
         // insert group
-        $groupId = BackendModel::getContainer()->get('database')->insert('groups', $group);
+        $groupId = BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('groups', $group);
 
         // build setting
         $setting['group_id'] = $groupId;
@@ -253,7 +253,7 @@ class Model
 
         foreach ($groups as $group) {
             // insert item
-            BackendModel::getContainer()->get('database')->insert(
+            BackendModel::getContainer()->get(\SpoonDatabase::class)->insert(
                 'users_groups',
                 ['user_id' => $userId, 'group_id' => $group]
             );
@@ -262,7 +262,7 @@ class Model
 
     public static function insertSetting(array $setting): int
     {
-        return BackendModel::getContainer()->get('database')->insert('groups_settings', $setting);
+        return BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('groups_settings', $setting);
     }
 
     /**
@@ -274,7 +274,7 @@ class Model
     public static function update(array $group, array $setting): void
     {
         // update group
-        BackendModel::getContainer()->get('database')->update('groups', ['name' => $group['name']], 'id = ?', [$group['id']]);
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->update('groups', ['name' => $group['name']], 'id = ?', [$group['id']]);
 
         // update setting
         self::updateSetting($setting);
@@ -282,6 +282,6 @@ class Model
 
     public static function updateSetting(array $setting): void
     {
-        BackendModel::getContainer()->get('database')->update('groups_settings', ['value' => $setting['value']], 'group_id = ? AND name = ?', [$setting['group_id'], $setting['name']]);
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->update('groups_settings', ['value' => $setting['value']], 'group_id = ? AND name = ?', [$setting['group_id'], $setting['name']]);
     }
 }

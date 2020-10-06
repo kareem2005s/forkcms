@@ -225,7 +225,7 @@ class Model
             return false;
         }
 
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
         $database->delete('themes_templates', 'id = ?', $id);
         $ids = (array) $database->getColumn(
             'SELECT i.revision_id
@@ -268,7 +268,7 @@ class Model
      */
     public static function existsTemplate(int $id): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT i.id FROM themes_templates AS i WHERE i.id = ?',
             [$id]
         );
@@ -289,7 +289,7 @@ class Model
 
     public static function getExtras(): array
     {
-        $extras = (array) BackendModel::getContainer()->get('database')->getRecords(
+        $extras = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.module, i.type, i.label, i.data
              FROM PagesModuleExtra AS i
              INNER JOIN modules AS m ON i.module = m.name
@@ -338,7 +338,7 @@ class Model
 
     public static function getExtrasData(): array
     {
-        $extras = (array) BackendModel::getContainer()->get('database')->getRecords(
+        $extras = (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecords(
             'SELECT i.id, i.module, i.type, i.label, i.data
              FROM PagesModuleExtra AS i
              INNER JOIN modules AS m ON i.module = m.name
@@ -536,7 +536,7 @@ class Model
 
     public static function getTemplate(int $id): array
     {
-        return (array) BackendModel::getContainer()->get('database')->getRecord(
+        return (array) BackendModel::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT i.* FROM themes_templates AS i WHERE i.id = ?',
             [$id]
         );
@@ -544,7 +544,7 @@ class Model
 
     public static function getTemplates(string $theme = null): array
     {
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
         $theme = \SpoonFilter::getValue(
             (string) $theme,
             null,
@@ -646,7 +646,7 @@ class Model
         $root = $xml->createElement('templates');
         $xml->appendChild($root);
 
-        $database = BackendModel::getContainer()->get('database');
+        $database = BackendModel::getContainer()->get(\SpoonDatabase::class);
 
         $records = $database->getRecords(self::QUERY_BROWSE_TEMPLATES, [$theme]);
 
@@ -685,7 +685,7 @@ class Model
 
     public static function insertTemplate(array $template): int
     {
-        return (int) BackendModel::getContainer()->get('database')->insert('themes_templates', $template);
+        return (int) BackendModel::getContainer()->get(\SpoonDatabase::class)->insert('themes_templates', $template);
     }
 
     public static function installModule(string $module): void
@@ -695,7 +695,7 @@ class Model
 
         // run installer
         $installer = new $class(
-            BackendModel::getContainer()->get('database'),
+            BackendModel::getContainer()->get(\SpoonDatabase::class),
             BL::getActiveLanguages(),
             array_keys(BL::getInterfaceLanguages()),
             false,
@@ -774,7 +774,7 @@ class Model
 
     public static function isModuleInstalled(string $module): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM modules
              WHERE name = ?
@@ -792,7 +792,7 @@ class Model
      */
     public static function isTemplateInUse(int $templateId): bool
     {
-        return (bool) BackendModel::getContainer()->get('database')->getVar(
+        return (bool) BackendModel::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM PagesPage AS i
              WHERE i.template_id = ? AND i.status = ?
@@ -803,7 +803,7 @@ class Model
 
     public static function isThemeInstalled(string $theme): bool
     {
-        return (bool) BackendModeL::getContainer()->get('database')->getVar(
+        return (bool) BackendModeL::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT 1
              FROM themes_templates
              WHERE theme = ?
@@ -1017,7 +1017,7 @@ class Model
 
     public static function updateTemplate(array $templateData): void
     {
-        BackendModel::getContainer()->get('database')->update(
+        BackendModel::getContainer()->get(\SpoonDatabase::class)->update(
             'themes_templates',
             $templateData,
             'id = ?',

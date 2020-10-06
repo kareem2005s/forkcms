@@ -228,7 +228,7 @@ class Model extends \Common\Core\Model
         // we have extras
         if (!empty($ids)) {
             // delete extras
-            self::getContainer()->get('database')->delete('PagesModuleExtra', 'id IN (' . implode(',', $ids) . ')');
+            self::getContainer()->get(\SpoonDatabase::class)->delete('PagesModuleExtra', 'id IN (' . implode(',', $ids) . ')');
         }
     }
 
@@ -348,7 +348,7 @@ class Model extends \Common\Core\Model
             $parameters[] = $action;
         }
 
-        $moduleExtras = (array) self::getContainer()->get('database')->getPairs($query, $parameters);
+        $moduleExtras = (array) self::getContainer()->get(\SpoonDatabase::class)->getPairs($query, $parameters);
 
         // No module extra's found
         if (empty($moduleExtras)) {

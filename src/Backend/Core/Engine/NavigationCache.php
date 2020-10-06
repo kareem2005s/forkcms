@@ -106,7 +106,7 @@ final class NavigationCache
      */
     private function getNavigationUrl(int $id): string
     {
-        $url = (array) Model::getContainer()->get('database')->getRecord(
+        $url = (array) Model::getContainer()->get(\SpoonDatabase::class)->getRecord(
             'SELECT id, url FROM backend_navigation WHERE id = ?',
             [$id]
         );
@@ -120,7 +120,7 @@ final class NavigationCache
         }
 
         // get the first child as fallback
-        $childId = (int) Model::getContainer()->get('database')->getVar(
+        $childId = (int) Model::getContainer()->get(\SpoonDatabase::class)->getVar(
             'SELECT id FROM backend_navigation WHERE parent_id = ? ORDER BY sequence ASC LIMIT 1',
             [$id]
         );
