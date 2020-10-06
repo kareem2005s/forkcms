@@ -4,6 +4,7 @@ namespace Frontend\Core\Language;
 
 use Backend\Modules\Locale\Engine\CacheBuilder;
 use Common\Core\Model;
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Exception;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -114,7 +115,7 @@ class Language
         // validate the cache
         if (empty(self::$languages['active'])) {
             // grab from settings
-            $activeLanguages = (array) Model::get('fork.settings')->get('Core', 'active_languages');
+            $activeLanguages = (array) Model::get(ModulesSettings::class)->get('Core', 'active_languages');
 
             // store in cache
             self::$languages['active'] = $activeLanguages;
@@ -293,7 +294,7 @@ class Language
         // validate the cache
         if (empty(self::$languages['possible_redirect'])) {
             // grab from settings
-            $redirectLanguages = (array) Model::get('fork.settings')->get('Core', 'redirect_languages');
+            $redirectLanguages = (array) Model::get(ModulesSettings::class)->get('Core', 'redirect_languages');
 
             // store in cache
             self::$languages['possible_redirect'] = $redirectLanguages;
