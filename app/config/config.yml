@@ -9,7 +9,6 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
         bind:
             $commandBus: '@simple_bus.command_bus' # Generic // This should be replaced with the Messenger component
             $siteIsMultiLingual: '%site.multilanguage%' # Pages
@@ -37,6 +36,12 @@ services:
             - '../../src/Common/**/*Test.php'
 
     ForkCMS\App\ForkController:
+    Common\Core\Cookie:
+        public: true
+    Common\ModulesSettings:
+        public: true
+    ForkCMS\Utility\Module\CopyContentToOtherLocale\CopyContentFromModulesToOtherLocaleManager:
+        public: true
     SpoonDatabase:
         class: SpoonDatabase
         arguments:
