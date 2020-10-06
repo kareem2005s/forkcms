@@ -13,13 +13,13 @@ use ForkCMS\Bundle\InstallerBundle\Form\Type\DatabaseType;
 use ForkCMS\Bundle\InstallerBundle\Form\Type\LanguagesType;
 use ForkCMS\Bundle\InstallerBundle\Form\Type\LoginType;
 use ForkCMS\Bundle\InstallerBundle\Form\Type\ModulesType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class InstallerController extends Controller
+final class InstallerController extends AbstractController
 {
     /** @var InstallationData|null */
     public static $installationData;
