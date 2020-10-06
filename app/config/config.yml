@@ -42,6 +42,8 @@ services:
         public: true
     ForkCMS\Utility\Module\CopyContentToOtherLocale\CopyContentFromModulesToOtherLocaleManager:
         public: true
+    Backend\Modules\Locale\Engine\CacheBuilder:
+        public: true
     SpoonDatabase:
         class: SpoonDatabase
         arguments:
