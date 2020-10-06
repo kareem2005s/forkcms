@@ -16,6 +16,7 @@ services:
             $rootDir: '%kernel.project_dir%/' # RequirementsChecker
             $projectDirectory: '%kernel.project_dir%' # InstallCommand
             $forkIsInstalled: '%fork.is_installed%' # InstallCommand
+            $sitePath: '%site.path_www%' # Thumbnails
 
     ForkCMS\:
         resource: '../../src/ForkCMS/*'
