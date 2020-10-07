@@ -12,6 +12,7 @@ final class FaqExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container)
     {
+        return; // @TODO remove this or the entire class
         $this->getLoader($container)->load('services.yml');
     }
 

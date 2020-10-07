@@ -12,6 +12,7 @@ final class TagsExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        return; // @TODO remove this or the entire class
         $this->getLoader($container)->load('services.yml');
     }
 

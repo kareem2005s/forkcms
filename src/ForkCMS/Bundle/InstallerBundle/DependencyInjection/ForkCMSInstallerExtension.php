@@ -16,6 +16,7 @@ class ForkCMSInstallerExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        return; // @TODO remove this or the entire class
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
     }

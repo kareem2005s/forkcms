@@ -16,6 +16,7 @@ class ForkCMSCoreExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        return; // @TODO remove this or the entire class
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
