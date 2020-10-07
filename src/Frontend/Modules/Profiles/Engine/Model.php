@@ -5,6 +5,7 @@ namespace Frontend\Modules\Profiles\Engine;
 use Backend\Modules\Profiles\Domain\Profile\Profile;
 use Backend\Modules\Profiles\Domain\Profile\Status;
 use Backend\Modules\Profiles\Domain\Setting\Setting;
+use Common\ModulesSettings;
 use Common\Uri as CommonUri;
 use Frontend\Core\Engine\Model as FrontendModel;
 use Frontend\Core\Engine\Navigation as FrontendNavigation;
@@ -84,7 +85,7 @@ class Model
         $avatar = $user->getSetting('avatar');
 
         // no custom avatar defined, get gravatar if allowed
-        if (empty($avatar) && FrontendModel::get('fork.settings')->get('Profiles', 'allow_gravatar', true)) {
+        if (empty($avatar) && FrontendModel::get(ModulesSettings::class)->get('Profiles', 'allow_gravatar', true)) {
             // define hash
             $hash = md5(mb_strtolower(trim('d' . $email)));
 

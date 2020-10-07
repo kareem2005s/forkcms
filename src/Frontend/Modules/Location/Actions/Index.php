@@ -2,6 +2,7 @@
 
 namespace Frontend\Modules\Location\Actions;
 
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
 use Frontend\Core\Language\Language;
 use Frontend\Core\Language\Locale;
@@ -25,7 +26,7 @@ class Index extends FrontendBaseBlock
     public function execute(): void
     {
         // define Google Maps API key
-        $apikey = $this->get('fork.settings')->get('Core', 'google_maps_key');
+        $apikey = $this->get(ModulesSettings::class)->get('Core', 'google_maps_key');
 
         // check Google Maps API key, otherwise show error
         if ($apikey == null) {
@@ -51,7 +52,7 @@ class Index extends FrontendBaseBlock
         $this->settings = FrontendLocationModel::getMapSettings(0);
         $firstMarker = current($this->items);
         if (empty($this->settings)) {
-            $this->settings = $this->get('fork.settings')->getForModule('Location');
+            $this->settings = $this->get(ModulesSettings::class)->getForModule('Location');
             $this->settings['center']['lat'] = $firstMarker['lat'];
             $this->settings['center']['lng'] = $firstMarker['lng'];
         }

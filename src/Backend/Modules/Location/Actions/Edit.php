@@ -9,6 +9,7 @@ use Backend\Core\Language\Language as BL;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Form\Type\DeleteType;
 use Backend\Modules\Location\Engine\Model as BackendLocationModel;
+use Common\ModulesSettings;
 use ForkCMS\Utility\Geolocation;
 use Symfony\Component\Intl\Intl;
 use Frontend\Modules\Location\Engine\Model as FrontendLocationModel;
@@ -40,7 +41,7 @@ class Edit extends BackendBaseActionEdit
             parent::execute();
 
             // define Google Maps API key
-            $apikey = $this->get('fork.settings')->get('Core', 'google_maps_key');
+            $apikey = $this->get(ModulesSettings::class)->get('Core', 'google_maps_key');
 
             // check Google Maps API key, otherwise redirect to settings
             if ($apikey === null) {
@@ -79,7 +80,7 @@ class Edit extends BackendBaseActionEdit
 
         // load the settings from the general settings
         if (empty($this->settings)) {
-            $settings = $this->get('fork.settings')->getForModule('Location');
+            $settings = $this->get(ModulesSettings::class)->getForModule('Location');
 
             $this->settings['width'] = $settings['width_widget'];
             $this->settings['height'] = $settings['height_widget'];

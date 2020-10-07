@@ -11,6 +11,7 @@ use Backend\Core\Language\Language as BL;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Form\Type\DeleteType;
 use Backend\Modules\Profiles\Engine\Model as BackendProfilesModel;
+use Common\ModulesSettings;
 use Symfony\Component\Intl\Intl as Intl;
 
 /**
@@ -61,7 +62,7 @@ class Edit extends BackendBaseActionEdit
         // get general info
         $this->profile = BackendProfilesModel::get($this->id);
 
-        $this->notifyProfile = $this->get('fork.settings')->get(
+        $this->notifyProfile = $this->get(ModulesSettings::class)->get(
             $this->url->getModule(),
             'send_new_profile_mail',
             false
@@ -86,7 +87,7 @@ class Edit extends BackendBaseActionEdit
 
         // get day, month and year
         if ($birthDate) {
-            list($birthYear, $birthMonth, $birthDay) = explode('-', $birthDate);
+            [$birthYear, $birthMonth, $birthDay] = explode('-', $birthDate);
         } else {
             // no birth date setting
             $birthDay = '';

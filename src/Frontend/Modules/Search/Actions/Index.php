@@ -2,6 +2,7 @@
 
 namespace Frontend\Modules\Search\Actions;
 
+use Common\ModulesSettings;
 use DateInterval;
 use Psr\Cache\CacheItemPoolInterface;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
@@ -41,7 +42,7 @@ class Index extends FrontendBaseBlock
     private function display(): void
     {
         $this->requestedPage = $this->url->getParameter('page', 'int', 1);
-        $this->limit = $this->get('fork.settings')->get('Search', 'overview_num_items', 20);
+        $this->limit = $this->get(ModulesSettings::class)->get('Search', 'overview_num_items', 20);
         $this->offset = ($this->requestedPage * $this->limit) - $this->limit;
         $this->cache = $this->get('cache.search');
         $this->cacheKey = implode(

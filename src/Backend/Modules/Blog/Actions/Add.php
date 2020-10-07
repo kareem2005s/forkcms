@@ -3,6 +3,7 @@
 namespace Backend\Modules\Blog\Actions;
 
 use Backend\Modules\Pages\Domain\Page\Page;
+use Common\ModulesSettings;
 use Symfony\Component\Filesystem\Filesystem;
 use Backend\Core\Engine\Base\ActionAdd as BackendBaseActionAdd;
 use Backend\Core\Engine\Authentication as BackendAuthentication;
@@ -38,7 +39,7 @@ class Add extends BackendBaseActionAdd
 
     private function loadForm(): void
     {
-        $this->imageIsAllowed = $this->get('fork.settings')->get($this->url->getModule(), 'show_image_form', true);
+        $this->imageIsAllowed = $this->get(ModulesSettings::class)->get($this->url->getModule(), 'show_image_form', true);
 
         $this->form = new BackendForm('add');
 
@@ -57,7 +58,7 @@ class Add extends BackendBaseActionAdd
         $this->form->addEditor('text')->makeRequired();
         $this->form->addEditor('introduction');
         $this->form->addRadiobutton('hidden', $rbtHiddenValues, 0);
-        $this->form->addCheckbox('allow_comments', $this->get('fork.settings')->get($this->getModule(), 'allow_comments', false));
+        $this->form->addCheckbox('allow_comments', $this->get(ModulesSettings::class)->get($this->getModule(), 'allow_comments', false));
         $this->form->addDropdown('category_id', $categories, $this->getRequest()->query->getInt('category'));
         if (count($categories) !== 2) {
             $this->form->getField('category_id')->setDefaultElement('');

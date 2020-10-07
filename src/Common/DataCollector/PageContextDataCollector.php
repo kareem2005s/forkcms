@@ -2,6 +2,7 @@
 
 namespace Common\DataCollector;
 
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Block\ExtraInterface;
 use Frontend\Core\Engine\Block\ModuleExtraInterface;
 use Frontend\Core\Engine\Block\Widget;
@@ -30,7 +31,7 @@ class PageContextDataCollector extends DataCollector
         }
 
         $this->page = $container->get('page');
-        $this->theme = $container->get('fork.settings')->get('Core', 'theme', 'Fork');
+        $this->theme = $container->get(ModulesSettings::class)->get('Core', 'theme', 'Fork');
         $this->sitePath = $container->getParameter('site.path_www');
     }
 

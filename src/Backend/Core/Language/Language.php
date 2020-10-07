@@ -4,6 +4,7 @@ namespace Backend\Core\Language;
 
 use Backend\Core\Engine\Model;
 use Backend\Modules\Locale\Engine\Model as BackendLocaleModel;
+use Common\ModulesSettings;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
@@ -59,7 +60,7 @@ class Language
     {
         // validate the cache
         if (empty(self::$activeLanguages)) {
-            self::$activeLanguages = (array) Model::get('fork.settings')->get('Core', 'active_languages');
+            self::$activeLanguages = (array) Model::get(ModulesSettings::class)->get('Core', 'active_languages');
         }
 
         // return from cache
@@ -149,7 +150,7 @@ class Language
         $languages = [];
 
         // grab the languages from the settings & loop language to reset the label
-        foreach ((array) Model::get('fork.settings')->get('Core', 'interface_languages', ['en']) as $key) {
+        foreach ((array) Model::get(ModulesSettings::class)->get('Core', 'interface_languages', ['en']) as $key) {
             // fetch language's translation
             $languages[$key] = self::getLabel(mb_strtoupper($key), 'Core');
         }
@@ -224,7 +225,7 @@ class Language
         $languages = [];
 
         // grab the languages from the settings & loop language to reset the label
-        foreach ((array) Model::get('fork.settings')->get('Core', 'languages', ['en']) as $key) {
+        foreach ((array) Model::get(ModulesSettings::class)->get('Core', 'languages', ['en']) as $key) {
             // fetch the language's translation
             $languages[$key] = self::getLabel(mb_strtoupper($key), 'Core');
         }

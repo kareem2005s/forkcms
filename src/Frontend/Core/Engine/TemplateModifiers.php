@@ -3,6 +3,7 @@
 namespace Frontend\Core\Engine;
 
 use Common\Exception\RedirectException;
+use Common\ModulesSettings;
 use DateTime;
 use Frontend\Core\Engine\Model as FrontendModel;
 use Frontend\Core\Engine\Block\Widget as FrontendBlockWidget;
@@ -28,7 +29,7 @@ class TemplateModifiers extends BaseTwigModifiers
     public static function formatDate($var): string
     {
         // get setting
-        $format = FrontendModel::get('fork.settings')->get('Core', 'date_format_short');
+        $format = FrontendModel::get(ModulesSettings::class)->get('Core', 'date_format_short');
 
         if ($var instanceof DateTime) {
             $var = $var->getTimestamp();
@@ -49,7 +50,7 @@ class TemplateModifiers extends BaseTwigModifiers
     public static function formatDateTime($var): string
     {
         // get setting
-        $format = FrontendModel::get('fork.settings')->get('Core', 'date_format_long');
+        $format = FrontendModel::get(ModulesSettings::class)->get('Core', 'date_format_long');
 
         if ($var instanceof DateTime) {
             $var = $var->getTimestamp();
@@ -85,7 +86,7 @@ class TemplateModifiers extends BaseTwigModifiers
     public static function formatNumber(float $number, int $decimals = null): string
     {
         // get setting
-        $format = FrontendModel::get('fork.settings')->get('Core', 'number_format');
+        $format = FrontendModel::get(ModulesSettings::class)->get('Core', 'number_format');
 
         // get amount of decimals
         if ($decimals === null) {
@@ -115,7 +116,7 @@ class TemplateModifiers extends BaseTwigModifiers
     public static function formatTime($var): string
     {
         // get setting
-        $format = FrontendModel::get('fork.settings')->get('Core', 'time_format');
+        $format = FrontendModel::get(ModulesSettings::class)->get('Core', 'time_format');
 
         if ($var instanceof DateTime) {
             $var = $var->getTimestamp();
@@ -187,8 +188,8 @@ class TemplateModifiers extends BaseTwigModifiers
 
         // return
         return '<abbr title="'.\SpoonDate::getDate(
-            FrontendModel::get('fork.settings')->get('Core', 'date_format_long') .', '
-            . FrontendModel::get('fork.settings')->get('Core', 'time_format'),
+            FrontendModel::get(ModulesSettings::class)->get('Core', 'date_format_long') .', '
+            . FrontendModel::get(ModulesSettings::class)->get('Core', 'time_format'),
             $timestamp,
             Locale::frontendLanguage()
         ).'">'.\SpoonDate::getTimeAgo($timestamp, Locale::frontendLanguage()).'</abbr>';
@@ -465,7 +466,7 @@ class TemplateModifiers extends BaseTwigModifiers
         // detect links
         $string = \SpoonFilter::replaceURLsWithAnchors(
             $string,
-            FrontendModel::get('fork.settings')->get('Core', 'seo_nofollow_in_comments', false)
+            FrontendModel::get(ModulesSettings::class)->get('Core', 'seo_nofollow_in_comments', false)
         );
 
         // replace newlines

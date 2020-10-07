@@ -8,6 +8,7 @@ use Backend\Core\Engine\Model as BackendModel;
 use Backend\Modules\ContentBlocks\Domain\ContentBlock\Command\CreateContentBlock;
 use Backend\Modules\ContentBlocks\Domain\ContentBlock\ContentBlockType;
 use Backend\Modules\ContentBlocks\Domain\ContentBlock\Event\ContentBlockCreated;
+use Common\ModulesSettings;
 use Symfony\Component\Form\Form;
 
 /**
@@ -73,7 +74,7 @@ class Add extends BackendBaseActionAdd
         $form = $this->createForm(
             ContentBlockType::class,
             new CreateContentBlock(),
-            ['theme' => $this->get('fork.settings')->get('Core', 'theme', 'Fork')]
+            ['theme' => $this->get(ModulesSettings::class)->get('Core', 'theme', 'Fork')]
         );
 
         $form->handleRequest($this->getRequest());

@@ -2,6 +2,7 @@
 
 namespace Frontend\Modules\Faq\Widgets;
 
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Widget as FrontendBaseWidget;
 use Frontend\Modules\Faq\Engine\Model as FrontendFaqModel;
 
@@ -23,7 +24,7 @@ class MostReadQuestions extends FrontendBaseWidget
         $this->template->assign(
             'widgetFaqMostRead',
             FrontendFaqModel::getMostRead(
-                $this->get('fork.settings')->get($this->getModule(), 'most_read_num_items', 10)
+                $this->get(ModulesSettings::class)->get($this->getModule(), 'most_read_num_items', 10)
             )
         );
     }

@@ -6,6 +6,7 @@ use Backend\Core\Config;
 use Backend\Core\Engine\Base\Config as BackendBaseConfig;
 use Backend\Core\Engine\Model as BackendModel;
 use Common\Exception\RedirectException;
+use Common\ModulesSettings;
 use ForkCMS\App\KernelLoader;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -230,7 +231,7 @@ class Url extends KernelLoader
 
     private function setLocale(): void
     {
-        $defaultLocale = $this->get('fork.settings')->get('Core', 'default_interface_language');
+        $defaultLocale = $this->get(ModulesSettings::class)->get('Core', 'default_interface_language');
         $locale = $this->getInterfaceLanguage();
         $possibleLocale = array_keys(BackendLanguage::getInterfaceLanguages());
 
@@ -244,7 +245,7 @@ class Url extends KernelLoader
 
     private function getInterfaceLanguage(): string
     {
-        $default = $this->get('fork.settings')->get('Core', 'default_interface_language', SITE_DEFAULT_LANGUAGE);
+        $default = $this->get(ModulesSettings::class)->get('Core', 'default_interface_language', SITE_DEFAULT_LANGUAGE);
 
         if (Authentication::getUser()->isAuthenticated()) {
             return Authentication::getUser()->getSetting('interface_language', $default);
@@ -287,7 +288,7 @@ class Url extends KernelLoader
     private function redirectToFistAvailableLink(string $language, array $navigation): void
     {
         foreach ($navigation as $navigationItem) {
-            list($module, $action) = explode('/', $navigationItem['url']);
+            [$module, $action] = explode('/', $navigationItem['url']);
             $module = \SpoonFilter::toCamelCase($module);
             $action = \SpoonFilter::toCamelCase($action);
 

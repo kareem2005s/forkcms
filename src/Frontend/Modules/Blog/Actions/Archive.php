@@ -2,6 +2,7 @@
 
 namespace Frontend\Modules\Blog\Actions;
 
+use Common\ModulesSettings;
 use DateTimeImmutable;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
 use Frontend\Core\Engine\Model;
@@ -52,7 +53,7 @@ class Archive extends FrontendBaseBlock
             $this->endDate->getTimestamp()
         );
 
-        $limit = $this->get('fork.settings')->get($this->getModule(), 'overview_num_items', 10);
+        $limit = $this->get(ModulesSettings::class)->get($this->getModule(), 'overview_num_items', 10);
         $numberOfPages = (int) ceil($numberOfItems / $limit);
 
         // Check if the page exists
@@ -160,7 +161,7 @@ class Archive extends FrontendBaseBlock
         $this->template->assign('items', $this->articles);
         $this->template->assign(
             'allowComments',
-            $this->get('fork.settings')->get($this->getModule(), 'allow_comments')
+            $this->get(ModulesSettings::class)->get($this->getModule(), 'allow_comments')
         );
     }
 
@@ -193,7 +194,7 @@ class Archive extends FrontendBaseBlock
     private function addLinkToRssFeed(): void
     {
         $this->header->addRssLink(
-            $this->get('fork.settings')->get($this->getModule(), 'rss_title_' . LANGUAGE, SITE_DEFAULT_TITLE),
+            $this->get(ModulesSettings::class)->get($this->getModule(), 'rss_title_' . LANGUAGE, SITE_DEFAULT_TITLE),
             FrontendNavigation::getUrlForBlock($this->getModule(), 'Rss')
         );
     }

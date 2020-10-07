@@ -8,6 +8,7 @@ use Backend\Core\Engine\Form as BackendForm;
 use Backend\Core\Language\Language as BL;
 use Backend\Form\Type\DeleteType;
 use Backend\Modules\FormBuilder\Engine\Autocomplete;
+use Common\ModulesSettings;
 use Frontend\Core\Language\Language as FL;
 use Backend\Modules\FormBuilder\Engine\Model as BackendFormBuilderModel;
 use Backend\Modules\FormBuilder\Engine\Helper as FormBuilderHelper;
@@ -202,7 +203,7 @@ class Edit extends BackendBaseActionEdit
         $this->form->addText('heading');
 
         // mailmotor dialog
-        $settings = BackendModel::get('fork.settings');
+        $settings = BackendModel::get(ModulesSettings::class);
         $this->form->addText(
             'mailmotor_list_id',
             $settings->get('Mailmotor', 'list_id_' . BL::getWorkingLanguage()) ?? $settings->get('Mailmotor', 'list_id')
@@ -225,7 +226,7 @@ class Edit extends BackendBaseActionEdit
 
         $this->template->assign('id', $this->record['id']);
         $this->template->assign('name', $this->record['name']);
-        $settings = BackendModel::get('fork.settings');
+        $settings = BackendModel::get(ModulesSettings::class);
         $recaptchaSiteKey = $settings->get('Core', 'google_recaptcha_site_key');
         $recaptchaSecretKey = $settings->get('Core', 'google_recaptcha_secret_key');
         $mailmotorListId = $settings->get('Mailmotor', 'list_id');

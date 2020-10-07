@@ -8,6 +8,7 @@ use Backend\Modules\Profiles\Domain\Group\Group;
 use Backend\Modules\Profiles\Domain\GroupRight\GroupRight;
 use Backend\Modules\Profiles\Domain\Setting\Setting;
 use Common\Mailer\Message;
+use Common\ModulesSettings;
 use Common\Uri as CommonUri;
 use Backend\Core\Engine\Authentication as BackendAuthentication;
 use Backend\Core\Language\Language as BL;
@@ -179,7 +180,7 @@ class Model
         }
 
         // no custom avatar defined, get gravatar if allowed
-        if (empty($avatar) && BackendModel::get('fork.settings')->get('Profiles', 'allow_gravatar', true)) {
+        if (empty($avatar) && BackendModel::get(ModulesSettings::class)->get('Profiles', 'allow_gravatar', true)) {
             // define hash
             $hash = md5(mb_strtolower(trim('d' . $email)));
 
@@ -668,10 +669,10 @@ class Model
     public static function notifyAdmin(array $values, string $templatePath = null): void
     {
         // to email
-        $toEmail = BackendModel::get('fork.settings')->get('Profiles', 'profile_notification_email', null);
+        $toEmail = BackendModel::get(ModulesSettings::class)->get('Profiles', 'profile_notification_email', null);
 
         if ($toEmail === null) {
-            $to = BackendModel::get('fork.settings')->get('Core', 'mailer_to');
+            $to = BackendModel::get(ModulesSettings::class)->get('Core', 'mailer_to');
             $toEmail = $to['email'];
         }
 
@@ -764,8 +765,8 @@ class Model
         }
 
         // define variables
-        $from = BackendModel::get('fork.settings')->get('Core', 'mailer_from');
-        $replyTo = BackendModel::get('fork.settings')->get('Core', 'mailer_reply_to');
+        $from = BackendModel::get(ModulesSettings::class)->get('Core', 'mailer_from');
+        $replyTo = BackendModel::get(ModulesSettings::class)->get('Core', 'mailer_reply_to');
 
         // create a message object and set all the needed properties
         $message = Message::newInstance($subject)

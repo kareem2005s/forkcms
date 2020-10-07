@@ -4,6 +4,7 @@ namespace Frontend\Modules\Profiles\Actions;
 
 use Backend\Modules\Profiles\Domain\Profile\Profile;
 use Common\Mailer\Message;
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
 use Frontend\Core\Engine\Form as FrontendForm;
 use Frontend\Core\Language\Language as FL;
@@ -99,8 +100,8 @@ class ResendActivation extends FrontendBaseBlock
     {
         $activationUrl = SITE_URL . FrontendNavigation::getUrlForBlock($this->getModule(), 'Activate')
                          . '/' . $this->profile->getSetting('activation_key');
-        $from = $this->get('fork.settings')->get('Core', 'mailer_from');
-        $replyTo = $this->get('fork.settings')->get('Core', 'mailer_reply_to');
+        $from = $this->get(ModulesSettings::class)->get('Core', 'mailer_from');
+        $replyTo = $this->get(ModulesSettings::class)->get('Core', 'mailer_reply_to');
         $message = Message::newInstance(FL::getMessage('RegisterSubject'))
             ->setFrom([$from['email'] => $from['name']])
             ->setTo([$this->profile->getEmail() => $this->profile->getDisplayName()])

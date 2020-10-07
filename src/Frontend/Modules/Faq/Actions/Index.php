@@ -2,6 +2,7 @@
 
 namespace Frontend\Modules\Faq\Actions;
 
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
 use Frontend\Modules\Faq\Engine\Model as FrontendFaqModel;
 
@@ -26,7 +27,7 @@ class Index extends FrontendBaseBlock
 
     private function getData(): void
     {
-        $limit = $this->get('fork.settings')->get($this->getModule(), 'overview_num_items_per_category', 10);
+        $limit = $this->get(ModulesSettings::class)->get($this->getModule(), 'overview_num_items_per_category', 10);
 
         $categoriesWithQuestions = array_map(
             function (array $category) use ($limit) {
@@ -50,7 +51,7 @@ class Index extends FrontendBaseBlock
         $this->template->assign('faqCategories', $this->categories);
         $this->template->assign(
             'allowMultipleCategories',
-            $this->get('fork.settings')->get($this->getModule(), 'allow_multiple_categories', true)
+            $this->get(ModulesSettings::class)->get($this->getModule(), 'allow_multiple_categories', true)
         );
     }
 }

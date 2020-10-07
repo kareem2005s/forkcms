@@ -5,6 +5,7 @@ namespace Frontend\Core\Engine;
 use Backend\Modules\Pages\Domain\Page\Page as PageEntity;
 use Backend\Modules\Pages\Domain\Page\PageRepository;
 use Backend\Modules\Pages\Domain\Page\Status;
+use Common\ModulesSettings;
 use Doctrine\ORM\EntityManager;
 use Frontend\Core\Language\Locale;
 use DateTime;
@@ -252,7 +253,7 @@ class Model extends \Common\Core\Model
             ? $cookie->get('track')
             : md5(uniqid('', true) . self::getSession()->getId());
 
-        if ($cookie->hasAllowedCookies() || !self::get('fork.settings')->get('Core', 'show_cookie_bar', false)) {
+        if ($cookie->hasAllowedCookies() || !self::get(ModulesSettings::class)->get('Core', 'show_cookie_bar', false)) {
             $cookie->set('track', self::$visitorId, 86400 * 365);
         }
 

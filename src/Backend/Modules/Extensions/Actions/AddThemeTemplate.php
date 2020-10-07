@@ -7,6 +7,7 @@ use Backend\Core\Engine\Form as BackendForm;
 use Backend\Core\Language\Language as BL;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Modules\Extensions\Engine\Model as BackendExtensionsModel;
+use Common\ModulesSettings;
 use Common\Uri;
 
 /**
@@ -66,7 +67,7 @@ class AddThemeTemplate extends BackendBaseActionAdd
 
         // determine selected theme, based upon submitted form or default theme
         if (!array_key_exists($this->selectedTheme, $this->availableThemes)) {
-            $this->selectedTheme = $this->get('fork.settings')->get('Core', 'theme', 'Fork');
+            $this->selectedTheme = $this->get(ModulesSettings::class)->get('Core', 'theme', 'Fork');
         }
     }
 
@@ -305,8 +306,8 @@ class AddThemeTemplate extends BackendBaseActionAdd
                 $item['id'] = BackendExtensionsModel::insertTemplate($item);
 
                 // set default template
-                if ($this->form->getField('default')->getChecked() && $item['theme'] == $this->get('fork.settings')->get('Core', 'theme', 'Fork')) {
-                    $this->get('fork.settings')->set($this->getModule(), 'default_template', $item['id']);
+                if ($this->form->getField('default')->getChecked() && $item['theme'] == $this->get(ModulesSettings::class)->get('Core', 'theme', 'Fork')) {
+                    $this->get(ModulesSettings::class)->set($this->getModule(), 'default_template', $item['id']);
                 }
 
                 // everything is saved, so redirect to the overview

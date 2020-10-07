@@ -5,6 +5,7 @@ namespace Backend\Modules\Location\Ajax;
 use Backend\Core\Engine\Base\AjaxAction as BackendBaseAJAXAction;
 use Backend\Core\Language\Language as BL;
 use Backend\Modules\Location\Engine\Model as BackendLocationModel;
+use Common\ModulesSettings;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -16,7 +17,7 @@ class SaveLiveLocation extends BackendBaseAJAXAction
     {
         parent::execute();
 
-        $generalSettings = $this->get('fork.settings')->getForModule('Location');
+        $generalSettings = $this->get(ModulesSettings::class)->getForModule('Location');
 
         // get parameters
         $itemId = $this->getRequest()->request->getInt('id');

@@ -9,6 +9,7 @@ use Backend\Core\Language\Language as BL;
 use Backend\Form\Type\DeleteType;
 use Backend\Modules\Extensions\Engine\Model as BackendExtensionsModel;
 use Backend\Modules\Pages\Engine\Model as BackendPagesModel;
+use Common\ModulesSettings;
 use Common\Uri;
 use ForkCMS\Utility\Thumbnails;
 
@@ -76,7 +77,7 @@ class EditThemeTemplate extends BackendBaseActionEdit
 
         // determine if deleting is allowed
         $deleteAllowed = true;
-        if ($this->record['id'] == $this->get('fork.settings')->get('Pages', 'default_template')) {
+        if ($this->record['id'] == $this->get(ModulesSettings::class)->get('Pages', 'default_template')) {
             $deleteAllowed = false;
         } elseif (count(BackendExtensionsModel::getTemplates()) == 1) {
             $deleteAllowed = false;
@@ -95,7 +96,7 @@ class EditThemeTemplate extends BackendBaseActionEdit
         $this->form = new BackendForm('edit');
 
         // init var
-        $defaultId = $this->get('fork.settings')->get('Pages', 'default_template');
+        $defaultId = $this->get(ModulesSettings::class)->get('Pages', 'default_template');
 
         // build available themes
         $themes = [];
@@ -104,7 +105,7 @@ class EditThemeTemplate extends BackendBaseActionEdit
         }
 
         // create elements
-        $this->form->addDropdown('theme', $themes, $this->get('fork.settings')->get('Core', 'theme', 'Fork'));
+        $this->form->addDropdown('theme', $themes, $this->get(ModulesSettings::class)->get('Core', 'theme', 'Fork'));
         $this->form->addText('label', $this->record['label']);
         $this->form->addText('file', str_replace('Core/Layout/Templates/', '', $this->record['path']));
         $this->form->addTextarea('format', str_replace('],[', "],\n[", $this->record['data']['format']));
@@ -380,7 +381,7 @@ class EditThemeTemplate extends BackendBaseActionEdit
         $item['data'] = serialize($item['data']);
 
         // if this is the default template make the template active
-        if ($this->get('fork.settings')->get('Pages', 'default_template') == $this->record['id']) {
+        if ($this->get(ModulesSettings::class)->get('Pages', 'default_template') == $this->record['id']) {
             $item['active'] = true;
         }
 
@@ -415,9 +416,9 @@ class EditThemeTemplate extends BackendBaseActionEdit
 
         // set default template
         if ($this->form->getField('default')->getChecked()
-            && $item['theme'] == $this->get('fork.settings')->get('Core', 'theme', 'Fork')
+            && $item['theme'] == $this->get(ModulesSettings::class)->get('Core', 'theme', 'Fork')
         ) {
-            $this->get('fork.settings')->set('pages', 'default_template', $item['id']);
+            $this->get(ModulesSettings::class)->set('pages', 'default_template', $item['id']);
         }
 
         // update all existing pages using this template to add the newly inserted block(s)

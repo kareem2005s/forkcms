@@ -9,6 +9,7 @@ use Backend\Core\Engine\Meta as BackendMeta;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Modules\Faq\Engine\Model as BackendFaqModel;
 use Backend\Modules\Pages\Domain\Page\Page;
+use Common\ModulesSettings;
 
 /**
  * This is the add-action, it will display a form to create a new category
@@ -18,7 +19,7 @@ class AddCategory extends BackendBaseActionAdd
     public function execute(): void
     {
         // only one category allowed, so we redirect
-        if (!$this->get('fork.settings')->get('Faq', 'allow_multiple_categories', true)) {
+        if (!$this->get(ModulesSettings::class)->get('Faq', 'allow_multiple_categories', true)) {
             $this->redirect(BackendModel::createUrlForAction('Categories') . '&error=only-one-category-allowed');
         }
 

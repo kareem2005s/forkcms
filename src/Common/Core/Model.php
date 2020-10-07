@@ -2,6 +2,7 @@
 
 namespace Common\Core;
 
+use Common\ModulesSettings;
 use ForkCMS\App\BaseModel;
 use ForkCMS\Utility\Thumbnails;
 use InvalidArgumentException;
@@ -230,7 +231,7 @@ class Model extends BaseModel
 
         if ($time !== null) {
             // define hour & minute
-            list($hour, $minute) = explode(':', $time->getValue());
+            [$hour, $minute] = explode(':', $time->getValue());
         }
 
         // make and return timestamp
@@ -272,7 +273,7 @@ class Model extends BaseModel
 
     protected static function getAkismet(): Akismet
     {
-        $akismetKey = self::get('fork.settings')->get('Core', 'akismet_key');
+        $akismetKey = self::get(ModulesSettings::class)->get('Core', 'akismet_key');
 
         // invalid key, so we can't detect spam
         if (empty($akismetKey)) {

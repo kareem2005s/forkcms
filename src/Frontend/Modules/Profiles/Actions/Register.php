@@ -3,6 +3,7 @@
 namespace Frontend\Modules\Profiles\Actions;
 
 use Common\Mailer\Message;
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
 use Frontend\Core\Engine\Form as FrontendForm;
 use Frontend\Core\Language\Language as FL;
@@ -115,8 +116,8 @@ class Register extends FrontendBaseBlock
     private function sendActivationEmail(array $profile, string $activationKey): void
     {
         $activationUrl = SITE_URL . FrontendNavigation::getUrlForBlock($this->getModule(), 'Activate');
-        $from = $this->get('fork.settings')->get('Core', 'mailer_from');
-        $replyTo = $this->get('fork.settings')->get('Core', 'mailer_reply_to');
+        $from = $this->get(ModulesSettings::class)->get('Core', 'mailer_from');
+        $replyTo = $this->get(ModulesSettings::class)->get('Core', 'mailer_reply_to');
         $message = Message::newInstance(FL::getMessage('RegisterSubject'))
             ->setFrom([$from['email'] => $from['name']])
             ->setTo([$profile['email'] => $profile['display_name']])

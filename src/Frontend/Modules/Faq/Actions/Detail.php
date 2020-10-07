@@ -3,6 +3,7 @@
 namespace Frontend\Modules\Faq\Actions;
 
 use Common\Mailer\Message;
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
 use Frontend\Core\Engine\Form as FrontendForm;
 use Frontend\Core\Language\Language as FL;
@@ -52,7 +53,7 @@ class Detail extends FrontendBaseBlock
      */
     private function getSetting(string $name, $default = null)
     {
-        return $this->get('fork.settings')->get($this->getModule(), $name, $default);
+        return $this->get(ModulesSettings::class)->get($this->getModule(), $name, $default);
     }
 
     private function getQuestion(): array
@@ -162,7 +163,7 @@ class Detail extends FrontendBaseBlock
         $this->template->assign('item', $this->question);
         $this->template->assign('inSameCategory', $this->getRelatedQuestionsFromTheSameCategory());
         $this->template->assign('related', $this->getRelatedQuestions());
-        $this->template->assign('settings', $this->get('fork.settings')->getForModule($this->getModule()));
+        $this->template->assign('settings', $this->get(ModulesSettings::class)->getForModule($this->getModule()));
 
         if ($this->hasStatus()) {
             $this->template->assign($this->getStatus(), true);
@@ -297,9 +298,9 @@ class Detail extends FrontendBaseBlock
     {
         $feedback['question'] = $this->question['question'];
 
-        $to = $this->get('fork.settings')->get('Core', 'mailer_to');
-        $from = $this->get('fork.settings')->get('Core', 'mailer_from');
-        $replyTo = $this->get('fork.settings')->get('Core', 'mailer_reply_to');
+        $to = $this->get(ModulesSettings::class)->get('Core', 'mailer_to');
+        $from = $this->get(ModulesSettings::class)->get('Core', 'mailer_from');
+        $replyTo = $this->get(ModulesSettings::class)->get('Core', 'mailer_reply_to');
         $message = Message::newInstance(
             sprintf(FL::getMessage('FaqFeedbackSubject'), $feedback['question'])
         )

@@ -2,6 +2,7 @@
 
 namespace Frontend\Modules\Search\Ajax;
 
+use Common\ModulesSettings;
 use DateInterval;
 use Psr\Cache\CacheItemPoolInterface;
 use Frontend\Core\Engine\Base\AjaxAction as FrontendBaseAJAXAction;
@@ -46,7 +47,7 @@ class Autosuggest extends FrontendBaseAJAXAction
     {
         // set variables
         $this->requestedPage = 1;
-        $this->limit = (int) $this->get('fork.settings')->get('Search', 'autosuggest_num_items', 10);
+        $this->limit = (int) $this->get(ModulesSettings::class)->get('Search', 'autosuggest_num_items', 10);
         $this->offset = ($this->requestedPage * $this->limit) - $this->limit;
         $this->cache = $this->get('cache.search');
         $this->cacheKey = implode(

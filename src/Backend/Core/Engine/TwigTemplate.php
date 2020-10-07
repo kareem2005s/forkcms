@@ -5,6 +5,7 @@ namespace Backend\Core\Engine;
 use Backend\Core\Language\Language as BL;
 use Common\Core\Twig\BaseTwigTemplate;
 use Common\Core\Twig\Extensions\TwigFilters;
+use Common\ModulesSettings;
 use Frontend\Core\Engine\FormExtension;
 use ReflectionClass;
 use Symfony\Bridge\Twig\AppVariable;
@@ -45,7 +46,7 @@ class TwigTemplate extends BaseTwigTemplate
             $container->set('template', $this);
         }
 
-        $this->forkSettings = $container->get('fork.settings');
+        $this->forkSettings = $container->get(ModulesSettings::class);
         if ($this->debugMode) {
             $this->enableAutoReload();
             $this->setCache(false);
@@ -194,7 +195,7 @@ class TwigTemplate extends BaseTwigTemplate
         // assign some variable constants (such as site-title)
         $this->assign(
             'SITE_TITLE',
-            Model::get('fork.settings')->get('Core', 'site_title_' . BL::getWorkingLanguage(), SITE_DEFAULT_TITLE)
+            Model::get(ModulesSettings::class)->get('Core', 'site_title_' . BL::getWorkingLanguage(), SITE_DEFAULT_TITLE)
         );
     }
 

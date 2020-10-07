@@ -5,6 +5,7 @@ namespace Backend\Modules\Pages\Actions;
 use Backend\Core\Engine\Base\ActionEdit as BackendBaseActionEdit;
 use Backend\Core\Engine\Form as BackendForm;
 use Backend\Core\Engine\Model as BackendModel;
+use Common\ModulesSettings;
 
 /**
  * This is the settings-action, it will display a form to set general pages settings
@@ -28,7 +29,7 @@ class Settings extends BackendBaseActionEdit
         // add fields for meta navigation
         $this->form->addCheckbox(
             'meta_navigation',
-            $this->get('fork.settings')->get($this->getModule(), 'meta_navigation', false)
+            $this->get(ModulesSettings::class)->get($this->getModule(), 'meta_navigation', false)
         );
     }
 
@@ -39,7 +40,7 @@ class Settings extends BackendBaseActionEdit
             // form is validated
             if ($this->form->isCorrect()) {
                 // set our settings
-                $this->get('fork.settings')->set(
+                $this->get(ModulesSettings::class)->set(
                     $this->getModule(),
                     'meta_navigation',
                     (bool) $this->form->getField('meta_navigation')->getValue()

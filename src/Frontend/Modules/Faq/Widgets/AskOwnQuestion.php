@@ -3,6 +3,7 @@
 namespace Frontend\Modules\Faq\Widgets;
 
 use Common\Mailer\Message;
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Widget as FrontendBaseWidget;
 use Frontend\Core\Engine\Form as FrontendForm;
 use Frontend\Core\Language\Language as FL;
@@ -34,7 +35,7 @@ class AskOwnQuestion extends FrontendBaseWidget
 
         $this->loadTemplate();
 
-        if (!$this->get('fork.settings')->get($this->getModule(), 'allow_own_question', false)) {
+        if (!$this->get(ModulesSettings::class)->get($this->getModule(), 'allow_own_question', false)) {
             return;
         }
 
@@ -79,7 +80,7 @@ class AskOwnQuestion extends FrontendBaseWidget
 
     private function isSpamFilterEnabled(): bool
     {
-        return $this->get('fork.settings')->get($this->getModule(), 'spamfilter', false);
+        return $this->get(ModulesSettings::class)->get($this->getModule(), 'spamfilter', false);
     }
 
     private function getSubmittedQuestion(): array
@@ -122,9 +123,9 @@ class AskOwnQuestion extends FrontendBaseWidget
 
     private function sendNewQuestionNotification(array $question): void
     {
-        $from = $this->get('fork.settings')->get('Core', 'mailer_from');
-        $to = $this->get('fork.settings')->get('Core', 'mailer_to');
-        $replyTo = $this->get('fork.settings')->get('Core', 'mailer_reply_to');
+        $from = $this->get(ModulesSettings::class)->get('Core', 'mailer_from');
+        $to = $this->get(ModulesSettings::class)->get('Core', 'mailer_to');
+        $replyTo = $this->get(ModulesSettings::class)->get('Core', 'mailer_reply_to');
         $message = Message::newInstance(sprintf(FL::getMessage('FaqOwnQuestionSubject'), $question['name']))
             ->setFrom([$from['email'] => $from['name']])
             ->setTo([$to['email'] => $to['name']])

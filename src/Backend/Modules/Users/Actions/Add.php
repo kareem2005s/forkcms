@@ -9,6 +9,7 @@ use Backend\Core\Language\Language as BL;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Modules\Users\Engine\Model as BackendUsersModel;
 use Backend\Modules\Groups\Engine\Model as BackendGroupsModel;
+use Common\ModulesSettings;
 
 /**
  * This is the add-action, it will display a form to create a new user
@@ -57,7 +58,7 @@ class Add extends BackendBaseActionAdd
         $this->form->addDropdown(
             'interface_language',
             BL::getInterfaceLanguages(),
-            $this->get('fork.settings')->get('Core', 'default_interface_language')
+            $this->get(ModulesSettings::class)->get('Core', 'default_interface_language')
         );
         $this->form->addDropdown(
             'preferred_editor',

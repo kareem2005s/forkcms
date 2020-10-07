@@ -49,8 +49,8 @@ final class FormBuilderSubmittedMailSubscriber
                 $field['settings']['send_confirmation_mail_to'] === true
             ) {
                 $to = $fieldData[$field['id']]['value'];
-                $from = FrontendModel::get('fork.settings')->get('Core', 'mailer_from');
-                $replyTo = FrontendModel::get('fork.settings')->get('Core', 'mailer_reply_to');
+                $from = FrontendModel::get(ModulesSettings::class)->get('Core', 'mailer_from');
+                $replyTo = FrontendModel::get(ModulesSettings::class)->get('Core', 'mailer_reply_to');
                 $message = Message::newInstance($field['settings']['confirmation_mail_subject'])
                     ->setFrom([$from['email'] => $from['name']])
                     ->setTo($to)

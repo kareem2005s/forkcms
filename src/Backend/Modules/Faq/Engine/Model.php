@@ -6,6 +6,7 @@ use Backend\Modules\Faq\Domain\Category\Category;
 use Backend\Core\Language\Locale;
 use Backend\Modules\Faq\Domain\Feedback\Feedback;
 use Backend\Modules\Faq\Domain\Question\Question;
+use Common\ModulesSettings;
 use Common\Uri as CommonUri;
 use Backend\Core\Language\Language as BL;
 use Backend\Core\Engine\Model as BackendModel;
@@ -56,7 +57,7 @@ class Model
 
     public static function deleteCategoryAllowed(int $id): bool
     {
-        if (!BackendModel::get('fork.settings')->get('Faq', 'allow_multiple_categories', true)
+        if (!BackendModel::get(ModulesSettings::class)->get('Faq', 'allow_multiple_categories', true)
             && self::getCategoryCount() == 1
         ) {
             return false;

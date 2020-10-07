@@ -5,6 +5,7 @@ namespace Backend\Modules\Extensions\Actions;
 use Backend\Core\Engine\Base\ActionEdit;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Modules\Extensions\Engine\Model;
+use Common\ModulesSettings;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -41,7 +42,7 @@ class ExportThemeTemplates extends ActionEdit
 
         // determine selected theme, based upon submitted form or default theme
         if (!array_key_exists($this->selectedTheme, $this->availableThemes)) {
-            $this->selectedTheme = $this->get('fork.settings')->get('Core', 'theme', 'Fork');
+            $this->selectedTheme = $this->get(ModulesSettings::class)->get('Core', 'theme', 'Fork');
         }
     }
 

@@ -5,6 +5,7 @@ namespace Frontend\Core\Engine;
 use Backend\Modules\Pages\Domain\ModuleExtra\ModuleExtra;
 use Backend\Modules\Pages\Domain\Page\Page as PageEntity;
 use Backend\Modules\Pages\Engine\Model as BackendPagesModel;
+use Common\ModulesSettings;
 use ForkCMS\App\KernelLoader;
 use Frontend\Core\Engine\Model as FrontendModel;
 use Frontend\Core\Language\Language;
@@ -197,7 +198,7 @@ class Navigation extends KernelLoader
      */
     private static function hasMetaNavigation(array $navigation): bool
     {
-        return isset($navigation['meta']) && Model::get('fork.settings')->get('Pages', 'meta_navigation', true);
+        return isset($navigation['meta']) && Model::get(ModulesSettings::class)->get('Pages', 'meta_navigation', true);
     }
 
     /**

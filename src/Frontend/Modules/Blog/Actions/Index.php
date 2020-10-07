@@ -2,6 +2,7 @@
 
 namespace Frontend\Modules\Blog\Actions;
 
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
 use Frontend\Core\Engine\Navigation as FrontendNavigation;
 use Frontend\Core\Language\Language;
@@ -26,7 +27,7 @@ class Index extends FrontendBaseBlock
         $requestedPage = $this->url->getParameter('page', 'int', 1);
         $numberOfItems = FrontendBlogModel::getAllCount();
 
-        $limit = $this->get('fork.settings')->get($this->getModule(), 'overview_num_items', 10);
+        $limit = $this->get(ModulesSettings::class)->get($this->getModule(), 'overview_num_items', 10);
         $numberOfPages = (int) ceil($numberOfItems / $limit);
 
         if ($numberOfPages === 0) {
@@ -58,7 +59,7 @@ class Index extends FrontendBaseBlock
     {
         // General rss feed
         $this->header->addRssLink(
-            $this->get('fork.settings')->get($this->getModule(), 'rss_title_' . LANGUAGE, SITE_DEFAULT_TITLE),
+            $this->get(ModulesSettings::class)->get($this->getModule(), 'rss_title_' . LANGUAGE, SITE_DEFAULT_TITLE),
             FrontendNavigation::getUrlForBlock($this->getModule(), 'Rss')
         );
 

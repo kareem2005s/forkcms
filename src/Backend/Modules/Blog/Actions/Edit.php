@@ -4,6 +4,7 @@ namespace Backend\Modules\Blog\Actions;
 
 use Backend\Modules\Blog\Form\BlogDeleteType;
 use Backend\Modules\Pages\Domain\Page\Page;
+use Common\ModulesSettings;
 use ForkCMS\Utility\Thumbnails;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
@@ -82,7 +83,7 @@ class Edit extends BackendBaseActionEdit
     private function getData(): void
     {
         $this->record = (array) BackendBlogModel::get($this->id);
-        $this->imageIsAllowed = $this->get('fork.settings')->get($this->url->getModule(), 'show_image_form', true);
+        $this->imageIsAllowed = $this->get(ModulesSettings::class)->get($this->url->getModule(), 'show_image_form', true);
 
         // is there a revision specified?
         $revisionToLoad = $this->getRequest()->query->getInt('revision');

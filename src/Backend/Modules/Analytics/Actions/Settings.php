@@ -5,6 +5,7 @@ namespace Backend\Modules\Analytics\Actions;
 use Backend\Core\Engine\Base\ActionIndex;
 use Backend\Core\Engine\Model;
 use Backend\Modules\Analytics\Form\SettingsType;
+use Common\ModulesSettings;
 
 /**
  * This is the settings-action (default), it will be used to couple your analytics
@@ -18,7 +19,7 @@ final class Settings extends ActionIndex
 
         $settingsForm = new SettingsType(
             'settings',
-            $this->get('fork.settings'),
+            $this->get(ModulesSettings::class),
             $this->get('analytics.google_analytics_service')
         );
 
@@ -27,16 +28,16 @@ final class Settings extends ActionIndex
         }
         $settingsForm->parse($this->template);
 
-        if ($this->get('fork.settings')->get($this->getModule(), 'web_property_id')) {
+        if ($this->get(ModulesSettings::class)->get($this->getModule(), 'web_property_id')) {
             $this->template->assign(
                 'web_property_id',
-                $this->get('fork.settings')->get($this->getModule(), 'web_property_id')
+                $this->get(ModulesSettings::class)->get($this->getModule(), 'web_property_id')
             );
         }
-        if ($this->get('fork.settings')->get($this->getModule(), 'profile')) {
+        if ($this->get(ModulesSettings::class)->get($this->getModule(), 'profile')) {
             $this->template->assign(
                 'profile',
-                $this->get('fork.settings')->get($this->getModule(), 'profile')
+                $this->get(ModulesSettings::class)->get($this->getModule(), 'profile')
             );
         }
 

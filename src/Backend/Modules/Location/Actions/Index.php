@@ -9,6 +9,7 @@ use Backend\Core\Engine\Form as BackendForm;
 use Backend\Core\Language\Language as BL;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Modules\Location\Engine\Model as BackendLocationModel;
+use Common\ModulesSettings;
 use Frontend\Modules\Location\Engine\Model as FrontendLocationModel;
 
 /**
@@ -35,7 +36,7 @@ class Index extends BackendBaseActionIndex
         parent::execute();
 
         // define Google Maps API key
-        $apikey = $this->get('fork.settings')->get('Core', 'google_maps_key');
+        $apikey = $this->get(ModulesSettings::class)->get('Core', 'google_maps_key');
 
         // check Google Maps API key, otherwise redirect to settings
         if ($apikey === null) {
@@ -68,7 +69,7 @@ class Index extends BackendBaseActionIndex
 
         // load the settings from the general settings
         if (empty($this->settings)) {
-            $this->settings = $this->get('fork.settings')->getForModule('Location');
+            $this->settings = $this->get(ModulesSettings::class)->getForModule('Location');
 
             $this->settings['map_type'] = $this->settings['map_type_widget'];
             $this->settings['map_style'] = $this->settings['map_style_widget'] ?? 'standard';

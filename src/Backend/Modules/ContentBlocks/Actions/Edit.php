@@ -14,6 +14,7 @@ use Backend\Modules\ContentBlocks\Domain\ContentBlock\ContentBlockRevisionDataGr
 use Backend\Modules\ContentBlocks\Domain\ContentBlock\ContentBlockType;
 use Backend\Modules\ContentBlocks\Domain\ContentBlock\Event\ContentBlockUpdated;
 use Backend\Modules\ContentBlocks\Domain\ContentBlock\Exception\ContentBlockNotFound;
+use Common\ModulesSettings;
 use Symfony\Component\Form\Form;
 
 /**
@@ -111,7 +112,7 @@ class Edit extends BackendBaseActionEdit
             ContentBlockType::class,
             new UpdateContentBlock($contentBlock),
             [
-                'theme' => $this->get('fork.settings')->get('Core', 'theme', 'Fork'),
+                'theme' => $this->get(ModulesSettings::class)->get('Core', 'theme', 'Fork'),
             ]
         );
 

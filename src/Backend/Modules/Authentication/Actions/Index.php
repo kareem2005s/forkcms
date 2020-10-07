@@ -10,6 +10,7 @@ use Backend\Core\Engine\Model as BackendModel;
 use Backend\Core\Engine\User;
 use Backend\Modules\Users\Engine\Model as BackendUsersModel;
 use Common\Mailer\Message;
+use Common\ModulesSettings;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
@@ -207,8 +208,8 @@ class Index extends BackendBaseActionIndex
                 $user->setSetting('reset_password_timestamp', time());
 
                 // send e-mail to user
-                $from = $this->get('fork.settings')->get('Core', 'mailer_from');
-                $replyTo = $this->get('fork.settings')->get('Core', 'mailer_reply_to');
+                $from = $this->get(ModulesSettings::class)->get('Core', 'mailer_from');
+                $replyTo = $this->get(ModulesSettings::class)->get('Core', 'mailer_reply_to');
                 $message = Message::newInstance(
                     \SpoonFilter::ucfirst(BL::msg('ResetYourPasswordMailSubject'))
                 )

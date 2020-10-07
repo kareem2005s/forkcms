@@ -2,6 +2,7 @@
 
 namespace Frontend\Modules\Blog\Actions;
 
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
 use Frontend\Core\Language\Language as FL;
 use Frontend\Core\Engine\Navigation as FrontendNavigation;
@@ -25,16 +26,16 @@ class Rss extends FrontendBaseBlock
         $blogPosts = FrontendBlogModel::getAll(30);
 
         $rss = new FrontendRSS(
-            $this->get('fork.settings')->get('Blog', 'rss_title_' . LANGUAGE, SITE_DEFAULT_TITLE),
+            $this->get(ModulesSettings::class)->get('Blog', 'rss_title_' . LANGUAGE, SITE_DEFAULT_TITLE),
             SITE_URL . FrontendNavigation::getUrlForBlock($this->getModule()),
-            $this->get('fork.settings')->get('Blog', 'rss_description_' . LANGUAGE, '')
+            $this->get(ModulesSettings::class)->get('Blog', 'rss_description_' . LANGUAGE, '')
         );
 
         foreach ($blogPosts as $blogPost) {
             $rss->addItem(
                 $this->getRssFeedItemForBlogPost(
                     $blogPost,
-                    $this->get('fork.settings')->get($this->getModule(), 'rss_meta_' . LANGUAGE, true)
+                    $this->get(ModulesSettings::class)->get($this->getModule(), 'rss_meta_' . LANGUAGE, true)
                 )
             );
         }

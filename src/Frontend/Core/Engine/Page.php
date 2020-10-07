@@ -4,6 +4,7 @@ namespace Frontend\Core\Engine;
 
 use Common\BlockEditor\Twig\ParseBlocksExtension;
 use Common\Exception\RedirectException;
+use Common\ModulesSettings;
 use ForkCMS\App\KernelLoader;
 use Frontend\Core\Engine\Block\ModuleExtraInterface;
 use Frontend\Core\Header\Header;
@@ -193,7 +194,7 @@ class Page extends KernelLoader
             // hide the cookiebar from within the code to prevent flickering
             $this->template->assignGlobal(
                 'cookieBarHide',
-                !$this->get('fork.settings')->get('Core', 'show_cookie_bar', false)
+                !$this->get(ModulesSettings::class)->get('Core', 'show_cookie_bar', false)
                 || $this->getContainer()->get('fork.cookie')->hasHiddenCookieBar()
             );
 

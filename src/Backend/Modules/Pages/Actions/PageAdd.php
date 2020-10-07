@@ -31,7 +31,7 @@ final class PageAdd extends Action
     {
         parent::setKernel($kernel);
 
-        $this->settings = $this->getContainer()->get('fork.settings');
+        $this->settings = $this->getContainer()->get(ModulesSettings::class);
         $this->pageRepository = $this->getContainer()->get(PageRepository::class);
         $this->commandBus = $this->getContainer()->get('command_bus');
     }

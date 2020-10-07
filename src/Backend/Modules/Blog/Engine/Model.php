@@ -10,6 +10,7 @@ use Backend\Core\Language\Locale;
 use Backend\Modules\Blog\Domain\Comment\Comment;
 use Backend\Modules\Blog\Domain\Category\Category;
 use Backend\Modules\Tags\Engine\Model as BackendTagsModel;
+use Common\ModulesSettings;
 use ForkCMS\Utility\Thumbnails;
 use Common\Doctrine\Entity\Meta;
 
@@ -107,7 +108,7 @@ class Model
         // check if this action is allowed
         if (BackendAuthentication::isAllowedAction('Settings', 'Blog')) {
             // rss title
-            $rssTitle = BackendModel::get('fork.settings')->get(
+            $rssTitle = BackendModel::get(ModulesSettings::class)->get(
                 'Blog',
                 'rss_title_' . BL::getWorkingLanguage(),
                 null
@@ -122,7 +123,7 @@ class Model
             }
 
             // rss description
-            $rssDescription = BackendModel::get('fork.settings')->get(
+            $rssDescription = BackendModel::get(ModulesSettings::class)->get(
                 'Blog',
                 'rss_description_' . BL::getWorkingLanguage(),
                 null
@@ -913,7 +914,7 @@ class Model
         unset($item['revision_id']);
 
         // how many revisions should we keep
-        $rowsToKeep = (int) BackendModel::get('fork.settings')->get('Blog', 'max_num_revisions', 20);
+        $rowsToKeep = (int) BackendModel::get(ModulesSettings::class)->get('Blog', 'max_num_revisions', 20);
 
         // set type of archive
         $archiveType = ($item['status'] === 'active' ? 'archived' : $item['status']);

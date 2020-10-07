@@ -7,6 +7,7 @@ use Backend\Core\Engine\Form as BackendForm;
 use Backend\Core\Language\Language as BL;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Modules\Profiles\Engine\Model as BackendProfilesModel;
+use Common\ModulesSettings;
 use Symfony\Component\Intl\Intl as Intl;
 
 /**
@@ -41,13 +42,13 @@ class Add extends BackendBaseActionAdd
 
     public function getData(): void
     {
-        $this->notifyAdmin = $this->get('fork.settings')->get(
+        $this->notifyAdmin = $this->get(ModulesSettings::class)->get(
             $this->url->getModule(),
             'send_new_profile_admin_mail',
             false
         );
 
-        $this->notifyProfile = $this->get('fork.settings')->get(
+        $this->notifyProfile = $this->get(ModulesSettings::class)->get(
             $this->url->getModule(),
             'send_new_profile_mail',
             false

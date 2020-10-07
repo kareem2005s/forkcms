@@ -9,6 +9,7 @@ use Backend\Core\Engine\Form as BackendForm;
 use Backend\Core\Engine\DataGridDatabase as BackendDataGridDatabase;
 use Backend\Core\Language\Language as BL;
 use Backend\Modules\Extensions\Engine\Model as BackendExtensionsModel;
+use Common\ModulesSettings;
 
 /**
  * This is the templates-action, it will display the templates-overview
@@ -56,7 +57,7 @@ class ThemeTemplates extends BackendBaseActionEdit
 
         // determine selected theme, based upon submitted form or default theme
         if (!array_key_exists($this->selectedTheme, $this->availableThemes)) {
-            $this->selectedTheme = $this->get('fork.settings')->get('Core', 'theme', 'Fork');
+            $this->selectedTheme = $this->get(ModulesSettings::class)->get('Core', 'theme', 'Fork');
         }
     }
 

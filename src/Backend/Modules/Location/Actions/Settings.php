@@ -7,6 +7,7 @@ use Backend\Core\Engine\Authentication as BackendAuthentication;
 use Backend\Core\Engine\Form as BackendForm;
 use Backend\Core\Language\Language as BL;
 use Backend\Core\Engine\Model as BackendModel;
+use Common\ModulesSettings;
 
 /**
  * This is the settings-action, it will display a form to set general location settings
@@ -27,9 +28,9 @@ class Settings extends BackendBaseActionEdit
         $this->form = new BackendForm('settings');
 
         // add map info (widgets)
-        $this->form->addDropdown('zoom_level_widget', array_combine(array_merge(['auto'], range(3, 18)), array_merge([BL::lbl('Auto', $this->getModule())], range(3, 18))), $this->get('fork.settings')->get($this->url->getModule(), 'zoom_level_widget', 13));
-        $this->form->addText('width_widget', $this->get('fork.settings')->get($this->url->getModule(), 'width_widget'));
-        $this->form->addText('height_widget', $this->get('fork.settings')->get($this->url->getModule(), 'height_widget'));
+        $this->form->addDropdown('zoom_level_widget', array_combine(array_merge(['auto'], range(3, 18)), array_merge([BL::lbl('Auto', $this->getModule())], range(3, 18))), $this->get(ModulesSettings::class)->get($this->url->getModule(), 'zoom_level_widget', 13));
+        $this->form->addText('width_widget', $this->get(ModulesSettings::class)->get($this->url->getModule(), 'width_widget'));
+        $this->form->addText('height_widget', $this->get(ModulesSettings::class)->get($this->url->getModule(), 'height_widget'));
         $this->form->addDropdown(
             'map_type_widget',
             [
@@ -39,7 +40,7 @@ class Settings extends BackendBaseActionEdit
                 'TERRAIN' => BL::lbl('Terrain', $this->getModule()),
                 'STREET_VIEW' => BL::lbl('StreetView', $this->getModule()),
             ],
-            $this->get('fork.settings')->get(
+            $this->get(ModulesSettings::class)->get(
                 $this->url->getModule(),
                 'map_type_widget',
                 'roadmap'
@@ -66,17 +67,17 @@ class Settings extends BackendBaseActionEdit
                 if ($width > 800) {
                     $width = 800;
                 } elseif ($width < 300) {
-                    $width = $this->get('fork.settings')->get('Location', 'width_widget');
+                    $width = $this->get(ModulesSettings::class)->get('Location', 'width_widget');
                 }
                 if ($height < 150) {
-                    $height = $this->get('fork.settings')->get('Location', 'height_widget');
+                    $height = $this->get(ModulesSettings::class)->get('Location', 'height_widget');
                 }
 
                 // set our settings (widgets)
-                $this->get('fork.settings')->set($this->url->getModule(), 'zoom_level_widget', (string) $this->form->getField('zoom_level_widget')->getValue());
-                $this->get('fork.settings')->set($this->url->getModule(), 'width_widget', $width);
-                $this->get('fork.settings')->set($this->url->getModule(), 'height_widget', $height);
-                $this->get('fork.settings')->set($this->url->getModule(), 'map_type_widget', (string) $this->form->getField('map_type_widget')->getValue());
+                $this->get(ModulesSettings::class)->set($this->url->getModule(), 'zoom_level_widget', (string) $this->form->getField('zoom_level_widget')->getValue());
+                $this->get(ModulesSettings::class)->set($this->url->getModule(), 'width_widget', $width);
+                $this->get(ModulesSettings::class)->set($this->url->getModule(), 'height_widget', $height);
+                $this->get(ModulesSettings::class)->set($this->url->getModule(), 'map_type_widget', (string) $this->form->getField('map_type_widget')->getValue());
 
                 // redirect to the settings page
                 $this->redirect(BackendModel::createUrlForAction('Settings') . '&report=saved');

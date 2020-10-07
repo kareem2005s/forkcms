@@ -3,6 +3,7 @@
 namespace Frontend\Modules\Blog\Actions;
 
 use Common\Doctrine\Entity\Meta;
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
 use Frontend\Core\Engine\Form as FrontendForm;
 use Frontend\Core\Header\MetaLink;
@@ -105,7 +106,7 @@ class Detail extends FrontendBaseBlock
 
     private function getModuleSettings(): array
     {
-        $moduleSettings = $this->get('fork.settings')->getForModule($this->getModule());
+        $moduleSettings = $this->get(ModulesSettings::class)->getForModule($this->getModule());
 
         // Ignore the individual setting if the blog module doesn't allow comments
         if (!$moduleSettings['allow_comments']) {
@@ -126,7 +127,7 @@ class Detail extends FrontendBaseBlock
     {
         // General rss feed
         $this->header->addRssLink(
-            $this->get('fork.settings')->get($this->getModule(), 'rss_title_' . LANGUAGE, SITE_DEFAULT_TITLE),
+            $this->get(ModulesSettings::class)->get($this->getModule(), 'rss_title_' . LANGUAGE, SITE_DEFAULT_TITLE),
             FrontendNavigation::getUrlForBlock($this->getModule(), 'Rss')
         );
 
@@ -153,7 +154,7 @@ class Detail extends FrontendBaseBlock
         $this->header->addOpenGraphData('url', SITE_URL . $this->blogPost['full_url'], true);
         $this->header->addOpenGraphData(
             'site_name',
-            $this->get('fork.settings')->get('Core', 'site_title_' . LANGUAGE, SITE_DEFAULT_TITLE),
+            $this->get(ModulesSettings::class)->get('Core', 'site_title_' . LANGUAGE, SITE_DEFAULT_TITLE),
             true
         );
 

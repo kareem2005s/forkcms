@@ -150,7 +150,7 @@ class Model
         }
 
         // check if the akismet key is available if there are modules that require it
-        if (!empty($akismetModules) && BackendModel::get('fork.settings')->get('Core', 'akismet_key', null) == '') {
+        if (!empty($akismetModules) && BackendModel::get(ModulesSettings::class)->get('Core', 'akismet_key', null) == '') {
             // add warning
             $warnings[] = [
                 'message' => sprintf(
@@ -162,7 +162,7 @@ class Model
 
         // check if the google maps key is available if there are modules that require it
         if (!empty($googleMapsModules)
-            && BackendModel::get('fork.settings')->get('Core', 'google_maps_key', null) == '') {
+            && BackendModel::get(ModulesSettings::class)->get('Core', 'google_maps_key', null) == '') {
             // add warning
             $warnings[] = [
                 'message' => sprintf(
@@ -218,7 +218,7 @@ class Model
         }
 
         // we can't delete the default template
-        if ($id == BackendModel::get('fork.settings')->get('Pages', 'default_template')) {
+        if ($id == BackendModel::get(ModulesSettings::class)->get('Pages', 'default_template')) {
             return false;
         }
         if (self::isTemplateInUse($id)) {
@@ -524,7 +524,7 @@ class Model
         }
 
         /** @var ModulesSettings $moduleSettings */
-        $moduleSettings = BackendModel::get('fork.settings');
+        $moduleSettings = BackendModel::get(ModulesSettings::class);
 
         return array_filter(
             BackendModel::getModules(),
@@ -548,7 +548,7 @@ class Model
         $theme = \SpoonFilter::getValue(
             (string) $theme,
             null,
-            BackendModel::get('fork.settings')->get('Core', 'theme', 'Fork')
+            BackendModel::get(ModulesSettings::class)->get('Core', 'theme', 'Fork')
         );
 
         $templates = (array) $database->getRecords(
@@ -873,7 +873,7 @@ class Model
             $item['description'] = $cronjob[0];
 
             // check if cronjob has already been run
-            $cronjobs = (array) BackendModel::get('fork.settings')->get('Core', 'cronjobs');
+            $cronjobs = (array) BackendModel::get(ModulesSettings::class)->get('Core', 'cronjobs');
             $item['active'] = in_array($information['name'] . '.' . $attributes['action'], $cronjobs);
 
             $information['cronjobs'][] = $item;

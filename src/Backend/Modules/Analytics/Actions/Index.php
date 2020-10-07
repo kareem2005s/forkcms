@@ -7,6 +7,7 @@ use Backend\Core\Engine\Model;
 use Backend\Core\Engine\DataGridArray;
 use Backend\Modules\Analytics\DateRange\DateRange;
 use Backend\Modules\Analytics\Form\DateRangeType;
+use Common\ModulesSettings;
 
 /**
  * This is the index-action (default), it will display the overview of analytics data
@@ -49,10 +50,10 @@ final class Index extends ActionIndex
         parent::parse();
 
         // if we don't have a token anymore, redirect to the settings page
-        if ($this->get('fork.settings')->get($this->getModule(), 'certificate') === null
-            || $this->get('fork.settings')->get($this->getModule(), 'account') === null
-            || $this->get('fork.settings')->get($this->getModule(), 'web_property_id') === null
-            || $this->get('fork.settings')->get($this->getModule(), 'profile') === null
+        if ($this->get(ModulesSettings::class)->get($this->getModule(), 'certificate') === null
+            || $this->get(ModulesSettings::class)->get($this->getModule(), 'account') === null
+            || $this->get(ModulesSettings::class)->get($this->getModule(), 'web_property_id') === null
+            || $this->get(ModulesSettings::class)->get($this->getModule(), 'profile') === null
         ) {
             $this->redirect(Model::createUrlForAction('Settings'));
         }

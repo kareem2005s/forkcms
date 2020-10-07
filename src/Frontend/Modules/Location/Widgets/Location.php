@@ -2,6 +2,7 @@
 
 namespace Frontend\Modules\Location\Widgets;
 
+use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Widget as FrontendBaseWidget;
 use Frontend\Core\Language\Locale;
 use Frontend\Modules\Location\Engine\Model as FrontendLocationModel;
@@ -29,7 +30,7 @@ class Location extends FrontendBaseWidget
     public function execute(): void
     {
         // define Google Maps API key
-        $apikey = $this->get('fork.settings')->get('Core', 'google_maps_key');
+        $apikey = $this->get(ModulesSettings::class)->get('Core', 'google_maps_key');
 
         // check Google Maps API key, otherwise show error
         if ($apikey == null) {
@@ -54,7 +55,7 @@ class Location extends FrontendBaseWidget
         $this->item = FrontendLocationModel::get($this->data['id']);
         $this->settings = FrontendLocationModel::getMapSettings($this->data['id']);
         if (empty($this->settings)) {
-            $settings = $this->get('fork.settings')->getForModule('Location');
+            $settings = $this->get(ModulesSettings::class)->getForModule('Location');
 
             $this->settings['width'] = $settings['width_widget'];
             $this->settings['height'] = $settings['height_widget'];
