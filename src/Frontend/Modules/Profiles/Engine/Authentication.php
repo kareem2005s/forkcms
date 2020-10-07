@@ -5,6 +5,7 @@ namespace Frontend\Modules\Profiles\Engine;
 use Backend\Modules\Profiles\Domain\Profile\Profile;
 use Backend\Modules\Profiles\Domain\Profile\Status;
 use Backend\Modules\Profiles\Domain\Session\Session;
+use Common\Core\Cookie;
 use Frontend\Core\Engine\Model as FrontendModel;
 use Frontend\Modules\Profiles\Engine\Model as FrontendProfilesModel;
 
@@ -87,9 +88,9 @@ class Authentication
 
             // invalid session
             FrontendModel::getSession()->set('frontend_profile_logged_in', false);
-        } elseif (FrontendModel::getContainer()->get('fork.cookie')->get('frontend_profile_secret_key', '') !== '') {
+        } elseif (FrontendModel::getContainer()->get(Cookie::class)->get('frontend_profile_secret_key', '') !== '') {
             // secret
-            $secret = FrontendModel::getContainer()->get('fork.cookie')->get('frontend_profile_secret_key');
+            $secret = FrontendModel::getContainer()->get(Cookie::class)->get('frontend_profile_secret_key');
 
             $Session = FrontendModel::get('profile.repository.profile_session')->findOneBySecretKey($secret);
 
@@ -106,7 +107,7 @@ class Authentication
                 $profile->registerLogin();
                 FrontendModel::get('doctrine.orm.entity_manager')->flush();
 
-                FrontendModel::getContainer()->get('fork.cookie')->set('frontend_profile_secret_key', $profileSecret);
+                FrontendModel::getContainer()->get(Cookie::class)->set('frontend_profile_secret_key', $profileSecret);
                 FrontendModel::getSession()->set('frontend_profile_logged_in', true);
 
                 self::$profile = $profile;
@@ -115,7 +116,7 @@ class Authentication
             }
 
             // invalid cookie
-            FrontendModel::getContainer()->get('fork.cookie')->delete('frontend_profile_secret_key');
+            FrontendModel::getContainer()->get(Cookie::class)->delete('frontend_profile_secret_key');
         }
 
         // no one is logged in
@@ -145,7 +146,7 @@ class Authentication
             );
 
             // set cookie
-            FrontendModel::getContainer()->get('fork.cookie')->set('frontend_profile_secret_key', $secretKey);
+            FrontendModel::getContainer()->get(Cookie::class)->set('frontend_profile_secret_key', $secretKey);
         }
 
         $SessionRepository = FrontendModel::get('profile.repository.profile_session');
@@ -185,7 +186,7 @@ class Authentication
         // set is_logged_in to false
         FrontendModel::getSession()->set('frontend_profile_logged_in', false);
 
-        FrontendModel::getContainer()->get('fork.cookie')->delete('frontend_profile_secret_key');
+        FrontendModel::getContainer()->get(Cookie::class)->delete('frontend_profile_secret_key');
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Frontend\Modules\Profiles\Tests\Engine;
 
 use Backend\Modules\Profiles\DataFixtures\LoadProfilesProfile;
+use Common\Core\Cookie;
 use Frontend\Core\Tests\FrontendWebTestCase;
 use Backend\Modules\Profiles\Domain\Profile\Status;
 use Common\WebTestCase;
@@ -230,7 +231,7 @@ final class AuthenticationTest extends FrontendWebTestCase
 
     public function testLogoutDeletesSecretKeyCookie(Client $client): void
     {
-        $cookie = $client->getContainer()->get('fork.cookie');
+        $cookie = $client->getContainer()->get(Cookie::class);
 
         self::assertTrue($cookie->has('frontend_profile_secret_key'));
         self::assertEquals(self::SECRET_COOKIE_KEY, $cookie->get('frontend_profile_secret_key'));

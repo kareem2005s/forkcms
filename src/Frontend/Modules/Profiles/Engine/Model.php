@@ -9,8 +9,8 @@ use Common\ModulesSettings;
 use Common\Uri as CommonUri;
 use Frontend\Core\Engine\Model as FrontendModel;
 use Frontend\Core\Engine\Navigation as FrontendNavigation;
+use Frontend\Core\Engine\TwigTemplate;
 use Frontend\Modules\Profiles\Engine\Authentication as FrontendProfilesAuthentication;
-use Twig\Environment;
 
 /**
  * In this file we store all generic functions that we will be using with profiles.
@@ -301,7 +301,7 @@ class Model
     public static function parse(): void
     {
         // get the template
-        $tpl = FrontendModel::getContainer()->get(Environment::class);
+        $tpl = FrontendModel::getContainer()->get(TwigTemplate::class);
 
         // logged in
         if (FrontendProfilesAuthentication::isLoggedIn()) {

@@ -5,6 +5,7 @@ namespace Frontend\Core\Engine;
 use Backend\Modules\Pages\Domain\Page\Page as PageEntity;
 use Backend\Modules\Pages\Domain\Page\PageRepository;
 use Backend\Modules\Pages\Domain\Page\Status;
+use Common\Core\Cookie;
 use Common\ModulesSettings;
 use Doctrine\ORM\EntityManager;
 use Frontend\Core\Language\Locale;
@@ -246,7 +247,7 @@ class Model extends \Common\Core\Model
         if (self::$visitorId !== null) {
             return self::$visitorId;
         }
-        $cookie = self::getContainer()->get('fork.cookie');
+        $cookie = self::getContainer()->get(Cookie::class);
 
         // get/init tracking identifier
         self::$visitorId = ($cookie->has('track') && $cookie->get('track', '') !== '')

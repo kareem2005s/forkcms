@@ -3,6 +3,7 @@
 namespace Frontend\Core\Engine;
 
 use Common\BlockEditor\Twig\ParseBlocksExtension;
+use Common\Core\Cookie;
 use Common\Exception\RedirectException;
 use Common\ModulesSettings;
 use ForkCMS\App\KernelLoader;
@@ -195,7 +196,7 @@ class Page extends KernelLoader
             $this->template->assignGlobal(
                 'cookieBarHide',
                 !$this->get(ModulesSettings::class)->get('Core', 'show_cookie_bar', false)
-                || $this->getContainer()->get('fork.cookie')->hasHiddenCookieBar()
+                || $this->getContainer()->get(Cookie::class)->hasHiddenCookieBar()
             );
 
             $this->parsePositions();

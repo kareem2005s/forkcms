@@ -4,6 +4,7 @@ namespace Backend\Core\Language;
 
 use Backend\Core\Engine\Model;
 use Backend\Modules\Locale\Engine\Model as BackendLocaleModel;
+use Common\Core\Cookie;
 use Common\ModulesSettings;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -262,7 +263,7 @@ class Language
         try {
             // Needed to make it possible to use the backend language in the console.
             if (defined('APPLICATION') && APPLICATION !== 'Console') {
-                Model::getContainer()->get('fork.cookie')->set('interface_language', $language);
+                Model::getContainer()->get(Cookie::class)->set('interface_language', $language);
             }
         } catch (RuntimeException|ServiceNotFoundException $e) {
             // settings cookies isn't allowed, because this isn't a real problem we ignore the exception

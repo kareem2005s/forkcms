@@ -12,7 +12,6 @@ use Frontend\Core\Engine\Theme;
 use Frontend\Core\Engine\TwigTemplate;
 use Frontend\Modules\Search\Engine\Model as FrontendSearchModel;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
 /**
  * This is the live suggest-action, it will output a list of results for a certain search
@@ -142,7 +141,7 @@ class Livesuggest extends FrontendBaseAJAXAction
 
     private function parse(): void
     {
-        $this->template = $this->get(Environment::class);
+        $this->template = $this->get(TwigTemplate::class);
 
         if (!$this->searchTerm) {
             return;

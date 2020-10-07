@@ -2,6 +2,7 @@
 
 namespace Frontend\Modules\Blog\Actions;
 
+use Common\Core\Cookie;
 use Common\Doctrine\Entity\Meta;
 use Common\ModulesSettings;
 use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
@@ -247,7 +248,7 @@ class Detail extends FrontendBaseBlock
         $this->form = new FrontendForm('commentsForm');
         $this->form->setAction($this->form->getAction() . '#' . FL::act('Comment'));
 
-        $cookie = FrontendModel::getContainer()->get('fork.cookie');
+        $cookie = FrontendModel::getContainer()->get(Cookie::class);
         $author = $cookie->get('comment_author');
         $email = ($cookie->has('comment_email') && filter_var($cookie->get('comment_email'), FILTER_VALIDATE_EMAIL))
             ? $cookie->get('comment_email') : null;
@@ -363,7 +364,7 @@ class Detail extends FrontendBaseBlock
     private function storeAuthorDataInCookies(array $comment): void
     {
         try {
-            $cookie = FrontendModel::getContainer()->get('fork.cookie');
+            $cookie = FrontendModel::getContainer()->get(Cookie::class);
             $cookie->set('comment_author', $comment['author']);
             $cookie->set('comment_email', $comment['email']);
             $cookie->set('comment_website', $comment['website']);

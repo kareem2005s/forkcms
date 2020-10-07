@@ -16,7 +16,6 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Twig\Environment;
 
 /**
  * This class implements a lot of functionality that can be extended by a specific block
@@ -108,7 +107,7 @@ class Block extends KernelLoader
         // get objects from the reference so they are accessible
         $this->header = $this->getContainer()->get('header');
         $this->url = $this->getContainer()->get('url');
-        $this->template = $this->getContainer()->get(Environment::class);
+        $this->template = $this->getContainer()->get(TwigTemplate::class);
         $this->breadcrumb = $this->getContainer()->get('breadcrumb');
 
         // set properties

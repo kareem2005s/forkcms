@@ -2,6 +2,7 @@
 
 namespace Frontend\Core\Header;
 
+use Common\Core\Cookie;
 use Common\Core\Header\Asset;
 use Common\Core\Header\AssetCollection;
 use Common\Core\Header\JsData;
@@ -15,7 +16,6 @@ use Frontend\Core\Engine\TwigTemplate;
 use Frontend\Core\Engine\Url;
 use Frontend\Core\Language\Locale;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Twig\Environment;
 
 /**
  * This class will be used to alter the head-part of the HTML-document that will be created by the frontend
@@ -100,7 +100,7 @@ class Header extends KernelLoader
         $container = $this->getContainer();
         $container->set('header', $this);
 
-        $this->template = $container->get(Environment::class);
+        $this->template = $container->get(TwigTemplate::class);
         $this->url = $container->get('url');
 
         $this->cssFiles = new AssetCollection(
@@ -343,7 +343,7 @@ class Header extends KernelLoader
         $siteHTMLHeader .= new GoogleAnalytics(
             $this->get(ModulesSettings::class),
             Model::getRequest()->getHttpHost(),
-            $this->get('fork.cookie')
+            $this->get(Cookie::class)
         );
         $siteHTMLHeader .= "\n" . $this->jsData;
         $this->template->assignGlobal('siteHTMLHeader', trim($siteHTMLHeader));
