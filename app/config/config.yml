@@ -44,6 +44,22 @@ services:
         public: true
     Backend\Modules\Locale\Engine\CacheBuilder:
         public: true
+    Backend\Modules\Pages\Engine\CacheBuilder:
+        public: true
+    Backend\Modules\Pages\Domain\Page\PageRepository:
+        public: true
+    Frontend\Core\Engine\TwigTemplate:
+        public: true
+        arguments:
+            - "@twig.loader"
+    ForkCMS\Bundle\CoreBundle\Validator\UrlValidator:
+        public: true
+    Common\BlockEditor\Twig\ParseBlocksExtension:
+        public: true
+    Monolog\Logger:
+        arguments:
+            - 'app'
+        public: true
     SpoonDatabase:
         class: SpoonDatabase
         public: true
