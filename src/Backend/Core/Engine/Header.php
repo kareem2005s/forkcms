@@ -9,6 +9,7 @@ use Common\Core\Header\Minifier;
 use Common\Core\Header\Priority;
 use Common\ModulesSettings;
 use ForkCMS\App\KernelLoader;
+use ForkCMS\Bundle\CoreBundle\Validator\UrlValidator;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Backend\Core\Language\Language as BL;
 
@@ -124,7 +125,7 @@ final class Header extends KernelLoader
         Priority $priority = null
     ): void {
         $module = $module ?? $this->url->getModule();
-        $isExternalUrl = $this->get('fork.validator.url')->isExternalUrl($file);
+        $isExternalUrl = $this->get(UrlValidator::class)->isExternalUrl($file);
         $overwritePath = $overwritePath || $isExternalUrl; // external urls always overwrite the path
         $minify = $minify && !$isExternalUrl;
 
@@ -161,7 +162,7 @@ final class Header extends KernelLoader
         Priority $priority = null
     ): void {
         $module = $module ?? $this->url->getModule();
-        $isExternalUrl = $this->get('fork.validator.url')->isExternalUrl($file);
+        $isExternalUrl = $this->get(UrlValidator::class)->isExternalUrl($file);
         $overwritePath = $overwritePath || $isExternalUrl; // external urls always overwrite the path
         $minify = $minify && !$isExternalUrl;
 

@@ -10,6 +10,7 @@ use Common\Core\Header\Minifier;
 use Common\Core\Header\Priority;
 use Common\ModulesSettings;
 use ForkCMS\App\KernelLoader;
+use ForkCMS\Bundle\CoreBundle\Validator\UrlValidator;
 use Frontend\Core\Engine\Model;
 use Frontend\Core\Engine\Theme;
 use Frontend\Core\Engine\TwigTemplate;
@@ -135,7 +136,7 @@ class Header extends KernelLoader
         bool $addTimestamp = true,
         Priority $priority = null
     ): void {
-        $isExternalUrl = $this->get('fork.validator.url')->isExternalUrl($file);
+        $isExternalUrl = $this->get(UrlValidator::class)->isExternalUrl($file);
         $file = $isExternalUrl ? $file : Theme::getPath($file);
         $minify = $minify && !$isExternalUrl;
 
@@ -156,7 +157,7 @@ class Header extends KernelLoader
         bool $addTimestamp = true,
         Priority $priority = null
     ): void {
-        $isExternalUrl = $this->get('fork.validator.url')->isExternalUrl($file);
+        $isExternalUrl = $this->get(UrlValidator::class)->isExternalUrl($file);
         $file = $isExternalUrl ? $file : Theme::getPath($file);
         $minify = $minify && !$isExternalUrl;
 
@@ -257,7 +258,7 @@ class Header extends KernelLoader
         $image = str_replace(SITE_URL, '', $image);
 
         // check if it no longer points to an absolute uri
-        if (!$this->getContainer()->get('fork.validator.url')->isExternalUrl($image)) {
+        if (!$this->getContainer()->get(UrlValidator::class)->isExternalUrl($image)) {
             if (!is_file(PATH_WWW . strtok($image, '?'))) {
                 return;
             }

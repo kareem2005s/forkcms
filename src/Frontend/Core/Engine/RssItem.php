@@ -3,6 +3,7 @@
 namespace Frontend\Core\Engine;
 
 use Common\Uri as CommonUri;
+use ForkCMS\Bundle\CoreBundle\Validator\UrlValidator;
 
 /**
  * FrontendRSSItem, this is our extended version of SpoonRSSItem
@@ -117,7 +118,7 @@ class RssItem extends \SpoonFeedRSSItem
     private function prependWithSiteUrlIfHttpIsMissing(string $link): string
     {
         // if link doesn't start with http(s), we prepend the URL of the site
-        if (!Model::getContainer()->get('fork.validator.url')->isExternalUrl($link)) {
+        if (!Model::getContainer()->get(UrlValidator::class)->isExternalUrl($link)) {
             return SITE_URL . $link;
         }
 

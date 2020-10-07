@@ -6,6 +6,7 @@ use Common\Core\Header\Priority;
 use Common\Doctrine\Entity\Meta;
 use Common\Exception\RedirectException;
 use ForkCMS\App\KernelLoader;
+use ForkCMS\Bundle\CoreBundle\Validator\UrlValidator;
 use Frontend\Core\Engine\Breadcrumb;
 use Frontend\Core\Engine\Exception;
 use Frontend\Core\Engine\Model;
@@ -131,7 +132,7 @@ class Block extends KernelLoader
         bool $addTimestamp = true
     ): void {
         // external urls always overwrite the path
-        $overwritePath = $overwritePath || $this->get('fork.validator.url')->isExternalUrl($file);
+        $overwritePath = $overwritePath || $this->get(UrlValidator::class)->isExternalUrl($file);
 
         // use module path
         if (!$overwritePath) {
@@ -162,7 +163,7 @@ class Block extends KernelLoader
         bool $addTimestamp = true
     ): void {
         // external urls always overwrite the path
-        $overwritePath = $overwritePath || $this->get('fork.validator.url')->isExternalUrl($file);
+        $overwritePath = $overwritePath || $this->get(UrlValidator::class)->isExternalUrl($file);
 
         // use module path
         if (!$overwritePath) {

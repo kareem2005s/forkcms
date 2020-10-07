@@ -5,6 +5,7 @@ namespace Frontend\Core\Engine\Base;
 use Common\Core\Header\Priority;
 use Common\Exception\RedirectException;
 use ForkCMS\App\KernelLoader;
+use ForkCMS\Bundle\CoreBundle\Validator\UrlValidator;
 use Frontend\Core\Engine\Model;
 use Frontend\Core\Engine\Url;
 use Frontend\Core\Header\Header;
@@ -106,7 +107,7 @@ class Widget extends KernelLoader
         bool $addTimestamp = true
     ): void {
         // external urls always overwrite the path
-        $overwritePath = $overwritePath || $this->get('fork.validator.url')->isExternalUrl($file);
+        $overwritePath = $overwritePath || $this->get(UrlValidator::class)->isExternalUrl($file);
 
         if (!$overwritePath) {
             $file = '/src/Frontend/Modules/' . $this->getModule() . '/Layout/Css/' . $file;
@@ -130,7 +131,7 @@ class Widget extends KernelLoader
         bool $addTimestamp = true
     ): void {
         // external urls always overwrite the path
-        $overwritePath = $overwritePath || $this->get('fork.validator.url')->isExternalUrl($file);
+        $overwritePath = $overwritePath || $this->get(UrlValidator::class)->isExternalUrl($file);
 
         if (!$overwritePath) {
             $file = '/src/Frontend/Modules/' . $this->getModule() . '/Js/' . $file;
