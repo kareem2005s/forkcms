@@ -4,6 +4,7 @@ namespace Backend\Modules\Pages\Engine;
 
 use Backend\Core\Engine\Authentication as BackendAuthentication;
 use Backend\Core\Engine\Model as BackendModel;
+use Backend\Core\Engine\TwigTemplate;
 use Backend\Core\Language\Language as BL;
 use Backend\Core\Language\Locale;
 use Backend\Modules\Extensions\Engine\Model as BackendExtensionsModel;
@@ -582,7 +583,7 @@ class Model
         ];
 
         // return
-        return BackendModel::getContainer()->get('templating')->render(
+        return BackendModel::getContainer()->get(TwigTemplate::class)->render(
             BACKEND_MODULES_PATH . '/Pages/Resources/views/NavigationTree.html.twig',
             [
                 'editUrl' => BackendModel::createUrlForAction('PageEdit', 'Pages'),

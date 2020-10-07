@@ -10,6 +10,7 @@ use Frontend\Core\Engine\Base\Block as FrontendBaseBlock;
 use Frontend\Core\Engine\Base\Config;
 use Frontend\Core\Engine\Exception as FrontendException;
 use Frontend\Core\Language\Language as FL;
+use Twig\Environment;
 
 /**
  * This class will handle all stuff related to blocks
@@ -94,7 +95,7 @@ class ExtraInterface extends KernelLoader implements ModuleExtraInterface
         $this->setModule($module);
         $this->setAction($action);
         $this->setData($data);
-        $this->template = $this->getContainer()->get('templating');
+        $this->template = $this->getContainer()->get(Environment::class);
         $this->url = $this->getContainer()->get('url');
 
         // load the config file for the required module

@@ -44,7 +44,7 @@ abstract class AbstractBlock
     final protected function parseWithTwig(string $template, array $data): string
     {
         /** @var TwigTemplate $templating */
-        $templating = $this->container->get('templating');
+        $templating = $this->container->get(TwigTemplate::class);
 
         return $templating->render($template, ['editorBlock' => $data]);
     }

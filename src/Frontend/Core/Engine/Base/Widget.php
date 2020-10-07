@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Twig\Environment;
 
 /**
  * This class implements a lot of functionality that can be extended by a specific widget
@@ -82,7 +83,7 @@ class Widget extends KernelLoader
 
         // get objects from the reference so they are accessible
         $this->header = $this->getContainer()->get('header');
-        $this->template = $this->getContainer()->get('templating');
+        $this->template = $this->getContainer()->get(Environment::class);
         $this->url = $this->getContainer()->get('url');
 
         // set properties

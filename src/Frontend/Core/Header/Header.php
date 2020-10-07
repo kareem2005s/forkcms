@@ -15,6 +15,7 @@ use Frontend\Core\Engine\TwigTemplate;
 use Frontend\Core\Engine\Url;
 use Frontend\Core\Language\Locale;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Twig\Environment;
 
 /**
  * This class will be used to alter the head-part of the HTML-document that will be created by the frontend
@@ -99,7 +100,7 @@ class Header extends KernelLoader
         $container = $this->getContainer();
         $container->set('header', $this);
 
-        $this->template = $container->get('templating');
+        $this->template = $container->get(Environment::class);
         $this->url = $container->get('url');
 
         $this->cssFiles = new AssetCollection(

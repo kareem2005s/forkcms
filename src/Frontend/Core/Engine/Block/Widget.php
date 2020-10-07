@@ -12,6 +12,7 @@ use Frontend\Core\Engine\Model as FrontendModel;
 use Frontend\Core\Engine\TwigTemplate;
 use Frontend\Core\Engine\Url;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Twig\Environment;
 
 /**
  * This class will handle all stuff related to widgets
@@ -82,7 +83,7 @@ class Widget extends KernelLoader implements ModuleExtraInterface
         $this->setModule($module);
         $this->setAction($action);
         $this->setData($data);
-        $this->template = $this->getContainer()->get('templating');
+        $this->template = $this->getContainer()->get(Environment::class);
         $this->url = $this->getContainer()->get('url');
 
         // load the config file for the required module

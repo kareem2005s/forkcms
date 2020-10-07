@@ -99,7 +99,7 @@ class Page extends KernelLoader
         parent::__construct($kernel);
 
         $this->getContainer()->set('page', $this);
-        $this->template = $this->getContainer()->get('templating');
+        $this->template = $this->getContainer()->get(TwigTemplate::class);
         $this->url = $this->getContainer()->get('url');
     }
 

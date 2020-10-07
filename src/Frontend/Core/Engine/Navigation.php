@@ -12,6 +12,7 @@ use Frontend\Core\Language\Language;
 use Frontend\Core\Language\Locale;
 use Frontend\Modules\Profiles\Engine\Authentication as FrontendAuthentication;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Twig\Environment;
 
 /**
  * This class will be used to build the navigation
@@ -50,7 +51,7 @@ class Navigation extends KernelLoader
     {
         parent::__construct($kernel);
 
-        $this->template = $this->getContainer()->get('templating');
+        $this->template = $this->getContainer()->get(TwigTemplate::class);
         $this->url = $this->getContainer()->get('url');
 
         // set selected ids
@@ -367,7 +368,7 @@ class Navigation extends KernelLoader
         }
 
         // return parsed content
-        return Model::get('templating')->render(
+        return Model::get(TwigTemplate::class)->render(
             $template,
             ['navigation' => $navigation[$type][$parentId]]
         );
