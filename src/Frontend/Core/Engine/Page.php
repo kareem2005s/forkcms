@@ -10,6 +10,8 @@ use ForkCMS\App\KernelLoader;
 use Frontend\Core\Engine\Block\ModuleExtraInterface;
 use Frontend\Core\Header\Header;
 use Frontend\Core\Language\Language;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -381,7 +383,7 @@ class Page extends KernelLoader
 
     protected function processExtra(ModuleExtraInterface $extra): void
     {
-        $this->getContainer()->get('logger.public')->info(
+        $this->getContainer()->get(Logger::class)->info(
             'Executing ' . get_class($extra) . " '{$extra->getAction()}' for module '{$extra->getModule()}'."
         );
 

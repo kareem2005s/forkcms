@@ -4,6 +4,8 @@ namespace Backend\Core\Engine;
 
 use Backend\Core\Engine\Base\Config;
 use ForkCMS\App\KernelLoader;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Backend\Core\Engine\Base\Action as BackendBaseAction;
@@ -57,7 +59,7 @@ class Action extends KernelLoader
 
         /** @var $action BackendBaseAction */
         $action = new $actionClass($this->getKernel());
-        $this->getContainer()->get('logger.public')->info(
+        $this->getContainer()->get(Logger::class)->info(
             "Executing backend action '{$action->getAction()}' for module '{$action->getModule()}'."
         );
         $action->execute();
