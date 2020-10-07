@@ -210,6 +210,6 @@ abstract class BaseTwigTemplate extends Environment
             }
         }
 
-        return $this->environment->render($template, array_merge($this->runtimeGlobals, $variables));
+        return $this->render($template, array_merge($this->runtimeGlobals, $variables));
     }
 }
