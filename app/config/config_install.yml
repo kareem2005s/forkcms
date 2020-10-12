@@ -13,8 +13,8 @@ framework:
     secret: "%kernel.secret%"
     router:
         resource: "%kernel.project_dir%/app/config/routing_install.yml"
-    templating:
-        engines: ['twig']
+    assets:
+        packages: #I have no idea why this has to be here but if it's not the "assets.packages" service doesn't get created
 
 # Assetic Configuration
 #assetic:
