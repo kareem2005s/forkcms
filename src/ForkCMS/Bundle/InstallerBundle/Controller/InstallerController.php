@@ -29,9 +29,15 @@ final class InstallerController extends AbstractController
     /** @var RequirementsChecker */
     private $requirementsChecker;
 
-    public function __construct(RequirementsChecker $requirementsChecker)
-    {
+    /** @var ForkInstaller */
+    private $forkInstaller;
+
+    public function __construct(
+        RequirementsChecker $requirementsChecker,
+        ForkInstaller $forkInstaller
+    ) {
         $this->requirementsChecker = $requirementsChecker;
+        $this->forkInstaller = $forkInstaller;
     }
 
     public function step1Action(): Response
@@ -77,14 +83,13 @@ final class InstallerController extends AbstractController
     {
         $this->checkInstall();
 
-        $forkInstaller = $this->get(ForkInstaller::class);
-        $status = $forkInstaller->install($this->getInstallationData($request));
+        $status = $this->forkInstaller->install($this->getInstallationData($request));
 
         return $this->render(
             '@ForkCMSInstaller/Installer/step6.html.twig',
             [
                 'installStatus' => $status,
-                'installer' => $forkInstaller,
+                'installer' => $this->forkInstaller,
                 'data' => $this->getInstallationData($request),
             ]
         );
