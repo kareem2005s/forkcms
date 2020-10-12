@@ -13,6 +13,8 @@ use ForkCMS\Bundle\InstallerBundle\Form\Type\DatabaseType;
 use ForkCMS\Bundle\InstallerBundle\Form\Type\LanguagesType;
 use ForkCMS\Bundle\InstallerBundle\Form\Type\LoginType;
 use ForkCMS\Bundle\InstallerBundle\Form\Type\ModulesType;
+use ForkCMS\Bundle\InstallerBundle\Service\ForkInstaller;
+use ForkCMS\Bundle\InstallerBundle\Service\RequirementsChecker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,12 +26,20 @@ final class InstallerController extends AbstractController
     /** @var InstallationData|null */
     public static $installationData;
 
+    /** @var RequirementsChecker */
+    private $requirementsChecker;
+
+    public function __construct(RequirementsChecker $requirementsChecker)
+    {
+        $this->requirementsChecker = $requirementsChecker;
+    }
+
     public function step1Action(): Response
     {
         $this->checkInstall();
 
         // if all our requirements are met, go to the next step
-        $requirementsChecker = $this->get('forkcms.requirements.checker');
+        $requirementsChecker = $this->requirementsChecker;
         if ($requirementsChecker->passes()) {
             return $this->redirect($this->generateUrl('install_step2'));
         }
@@ -67,7 +77,7 @@ final class InstallerController extends AbstractController
     {
         $this->checkInstall();
 
-        $forkInstaller = $this->get('forkcms.installer');
+        $forkInstaller = $this->get(ForkInstaller::class);
         $status = $forkInstaller->install($this->getInstallationData($request));
 
         return $this->render(
@@ -127,7 +137,7 @@ final class InstallerController extends AbstractController
         $this->checkInstall();
 
         // check if can start the next step
-        $requirementsChecker = $this->get('forkcms.requirements.checker');
+        $requirementsChecker = $this->requirementsChecker;
         if ($requirementsChecker->hasErrors()) {
             return $this->redirect($this->generateUrl('install_step1'));
         }
