@@ -56,14 +56,14 @@
 {% endblock checkbox_radio_label %}
 
 {%- block label_asterisk -%}
-  {% spaceless %}
-    {% import 'ForkCMSInstallerBundle:Installer:macros.html.twig' as macro %}
+  {% apply spaceless %}
+    {% import '@ForkCMSInstaller/Installer/macros.html.twig' as macro %}
     {{ macro.required }}
-  {% endspaceless %}
+  {% endapply %}
 {%- endblock label_asterisk -%}
 
 {% block form_errors -%}
-  {% import 'ForkCMSInstallerBundle:Installer:macros.html.twig' as macro %}
+  {% import '@ForkCMSInstaller/Installer/macros.html.twig' as macro %}
   {% if errors|length > 0 -%}
     {% if form.parent %}<small class="form-text text-muted">{% else %}<div class="alert alert-danger">{% endif %}
     <ul class="list-unstyled mb-0">
@@ -97,8 +97,8 @@
 {%- endblock %}
 
 {% block bootstrap_collection_row %}
-  {% spaceless %}
-    {% import 'ForkCMSInstallerBundle:Installer:macros.html.twig' as macro %}
+  {% apply spaceless %}
+    {% import '@ForkCMSInstaller/Installer/macros.html.twig' as macro %}
     {% if prototype is defined %}
       {% set prototype_vars = {} %}
       {% if style is defined %}
@@ -155,7 +155,7 @@
         </div>
       </div>
     </div>
-  {% endspaceless %}
+  {% endapply %}
 {% endblock bootstrap_collection_row %}
 
 {% block form_row %}
