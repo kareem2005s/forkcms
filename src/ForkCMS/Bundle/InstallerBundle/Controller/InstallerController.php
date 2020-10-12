@@ -48,7 +48,7 @@ final class InstallerController extends AbstractController
             'ForkCMSInstallerBundle:Installer:step1.html.twig',
             [
                 'checker' => $requirementsChecker,
-                'rootDir' => realpath($this->container->getParameter('site.path_www')),
+                'rootDir' => realpath($this->getParameter('site.path_www')),
             ]
         );
     }
@@ -114,7 +114,7 @@ final class InstallerController extends AbstractController
     protected function checkInstall()
     {
         $filesystem = new Filesystem();
-        $kernelDir = $this->container->getParameter('kernel.project_dir') . '/app';
+        $kernelDir = $this->getParameter('kernel.project_dir') . '/app';
         $parameterFile = $kernelDir . 'config/parameters.yml';
         if ($filesystem->exists($parameterFile)) {
             throw new ExitException(
