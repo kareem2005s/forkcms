@@ -47,8 +47,8 @@ webpack_encore:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-    form_themes:
-        - "%fork.form.theme%"
+#    form_themes:
+#        - "%fork.form.theme%"
     paths:
         '%site.path_www%/src/Frontend/Modules/': ForkFrontendModules
 
