@@ -1,0 +1,24 @@
+parameters:
+    database.driver:        mysql
+    database.host:          127.0.0.1
+    database.port:          3306
+    database.name:          kaka
+    database.user:          root
+    database.password:      root
+
+    kernel.secret:          whatever
+
+    fork.debug_email:       whatever@stijn.be
+    fork.debug_message:     'Internal error.'
+    fork.version:           '5.8.2'
+
+    session.cookie_secure:  true
+    site.protocol:          https
+    site.domain:            forkcms.localhost:8000
+    site.default_title:     FuckFork
+    site.multilanguage:     true
+    site.default_language:  en
+    site.path_www:          "%kernel.project_dir%"
+
+    action.group_tag:       'kak'
+    action.rights_level:    7

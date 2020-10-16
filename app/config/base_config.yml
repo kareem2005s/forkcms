@@ -27,6 +27,8 @@ framework:
                 adapter: cache.app
                 public: true
                 default_lifetime: 31622400 # one year
+    assets:
+        packages: #I have no idea why this has to be here but if it's not the "assets.packages" service doesn't get created
 
 webpack_encore:
     output_path: '%kernel.project_dir%/src/Backend/Core/build'

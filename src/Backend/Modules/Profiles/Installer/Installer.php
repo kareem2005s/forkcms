@@ -9,6 +9,7 @@ use Backend\Modules\Profiles\Domain\Group\Group;
 use Backend\Modules\Profiles\Domain\GroupRight\GroupRight;
 use Backend\Modules\Profiles\Domain\Session\Session;
 use Backend\Modules\Profiles\Domain\Setting\Setting;
+use Common\Doctrine\Entity\CreateSchema;
 use ForkCMS\Bundle\InstallerBundle\Language\Locale;
 use SpoonFilter;
 use Symfony\Component\Filesystem\Filesystem;
@@ -410,7 +411,7 @@ class Installer extends ModuleInstaller
 
     private function configureEntities(): void
     {
-        Model::get('fork.entity.create_schema')->forEntityClasses(
+        Model::get(CreateSchema::class)->forEntityClasses(
             [
                 Profile::class,
                 Group::class,

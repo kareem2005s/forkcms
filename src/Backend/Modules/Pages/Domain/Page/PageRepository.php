@@ -12,10 +12,10 @@ use Common\Doctrine\Entity\Meta;
 use Common\Locale;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use ForkCMS\App\ForkController;
 use Frontend\Core\Language\Language;
 

@@ -2,6 +2,7 @@
 
 namespace ForkCMS\Bundle\InstallerBundle\Controller;
 
+use Backend\Core\Engine\Model;
 use Common\Exception\ExitException;
 use ForkCMS\Bundle\InstallerBundle\Entity\InstallationData;
 use ForkCMS\Bundle\InstallerBundle\Form\Handler\DatabaseHandler;
@@ -20,6 +21,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 final class InstallerController extends AbstractController
 {
@@ -33,9 +35,11 @@ final class InstallerController extends AbstractController
     private $forkInstaller;
 
     public function __construct(
+        KernelInterface $kernel,
         RequirementsChecker $requirementsChecker,
         ForkInstaller $forkInstaller
     ) {
+        Model::setContainer($kernel->getContainer());
         $this->requirementsChecker = $requirementsChecker;
         $this->forkInstaller = $forkInstaller;
     }

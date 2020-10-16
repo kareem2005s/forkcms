@@ -10,6 +10,7 @@ use Backend\Modules\Pages\Domain\ModuleExtra\ModuleExtraRepository;
 use Backend\Modules\Pages\Domain\ModuleExtra\ModuleExtraType;
 use Backend\Modules\Pages\Domain\PageBlock\PageBlockRepository;
 use Common\BlockEditor\EditorBlocks;
+use Common\Doctrine\Entity\CreateSchema;
 use ForkCMS\Bundle\InstallerBundle\Language\Locale;
 use Backend\Modules\Pages\Domain\Page\PageRepository;
 
@@ -41,7 +42,7 @@ class Installer extends ModuleInstaller
 
     private function configureEntities(): void
     {
-        Model::get('fork.entity.create_schema')->forEntityClasses(
+        Model::get(CreateSchema::class)->forEntityClasses(
             [
                 Comment::class,
                 Category::class,

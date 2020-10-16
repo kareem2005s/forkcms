@@ -16,8 +16,8 @@ use ForkCMS\App\AppKernel;
 use ForkCMS\App\BaseModel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Debug\Debug;
 use Backend\Init as BackendInit;
+use Symfony\Component\ErrorHandler\Debug;
 
 $input = new ArgvInput();
 $env = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');

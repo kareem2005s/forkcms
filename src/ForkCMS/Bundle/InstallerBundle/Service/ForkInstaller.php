@@ -24,43 +24,6 @@ use Symfony\Component\Finder\Finder;
 class ForkInstaller
 {
     /**
-     * @var array
-     */
-    private $defaultExtras = [];
-
-    /**
-     * @var SpoonDatabase
-     */
-    private $database;
-
-    /**
-     * @var PageBlockRepository
-     */
-    private $pageBlockRepository;
-
-    /**
-     * @var PageRepository
-     */
-    private $pageRepository;
-
-    /**
-     * @var ModuleExtraRepository
-     */
-    private $moduleExtraRepository;
-
-    public function __construct(
-        SpoonDatabase $database,
-        PageBlockRepository $pageBlockRepository,
-        PageRepository $pageRepository,
-        ModuleExtraRepository $moduleExtraRepository
-    ) {
-        $this->database = $database;
-        $this->pageBlockRepository = $pageBlockRepository;
-        $this->pageRepository = $pageRepository;
-        $this->moduleExtraRepository = $moduleExtraRepository;
-    }
-
-    /**
      * Installs Fork
      *
      * @param InstallationData $data The collected data required for Fork
@@ -155,7 +118,7 @@ class ForkInstaller
     protected function buildDatabase(InstallationData $data): void
     {
         // lets do some magic to add the database connection details from the installation data
-        $this->database->__construct(
+        $this->database = new SpoonDatabase(
             'mysql',
             $data->getDatabaseHostname(),
             $data->getDatabaseUsername(),
@@ -282,7 +245,7 @@ class ForkInstaller
 
         // map the config templates to their destination filename
         $yamlFiles = [
-            PATH_WWW . '/app/config/parameters.yml.dist' => PATH_WWW . '/app/config/parameters.yml',
+            PATH_WWW . '/.env.dist' => PATH_WWW . '/.env.local',
         ];
 
         foreach ($yamlFiles as $sourceFilename => $destinationFilename) {
@@ -321,10 +284,9 @@ class ForkInstaller
             '<site-default-title>' => 'Fork CMS',
             '<site-multilanguage>' => $data->getLanguageType() === 'multiple' ? 'true' : 'false',
             '<site-default-language>' => $data->getDefaultLanguage(),
-            '<path-www>' => PATH_WWW,
             '<action-group-tag>' => '\@actiongroup',
             '<action-rights-level>' => 7,
-            '<secret>' => Model::generateRandomString(32, true, true, true, false),
+            '<secret>' => bin2hex(random_bytes(10)),
         ];
     }
 

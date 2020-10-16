@@ -2,13 +2,12 @@
 
 namespace Backend\Modules\Pages\Domain\PageBlock;
 
-use Backend\Modules\Pages\Domain\Page\Page;
 use Backend\Modules\Pages\Domain\Page\Status;
 use Common\Locale;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method PageBlock|null find($id, $lockMode = null, $lockVersion = null)

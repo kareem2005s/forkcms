@@ -13,8 +13,6 @@ framework:
     secret: "%kernel.secret%"
     router:
         resource: "%kernel.project_dir%/app/config/routing_install.yml"
-    assets:
-        packages: #I have no idea why this has to be here but if it's not the "assets.packages" service doesn't get created
 
 # Assetic Configuration
 #assetic:
@@ -30,6 +28,81 @@ monolog:
             type: stream
             path: "%site.path_www%/var/logs/%kernel.environment%/debug.log"
             level: debug
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $commandBus: '@simple_bus.command_bus' # Generic // This should be replaced with the Messenger component
+            $siteIsMultiLingual: '%site.multilanguage%' # Pages
+            $rootDir: '%kernel.project_dir%/' # RequirementsChecker
+            $projectDirectory: '%kernel.project_dir%' # InstallCommand
+            $forkIsInstalled: '%fork.is_installed%' # InstallCommand
+            $sitePath: '%site.path_www%' # Thumbnails
+
+    ForkCMS\:
+        resource: '../../src/ForkCMS/*'
+        exclude:
+            - '../../src/ForkCMS/**/*Test.php'
+    Backend\:
+        resource: '../../src/Backend/*'
+        exclude:
+            - '../../src/Backend/Form/EventListener/AddMetaSubscriber.php'
+            - '../../src/Backend/**/*Test.php'
+    Frontend\:
+        resource: '../../src/Frontend/*'
+        exclude:
+            - '../../src/Frontend/**/*Test.php'
+    Common\:
+        resource: '../../src/Common/*'
+        exclude:
+            - '../../src/Common/**/*Test.php'
+
+    ForkCMS\Bundle\InstallerBundle\Controller\InstallerController:
+    ForkCMS\App\ForkController:
+    Common\Core\Cookie:
+        public: true
+    Common\ModulesSettings:
+        public: true
+    ForkCMS\Utility\Module\CopyContentToOtherLocale\CopyContentFromModulesToOtherLocaleManager:
+        public: true
+    Backend\Modules\Locale\Engine\CacheBuilder:
+        public: true
+    Backend\Modules\Pages\Engine\CacheBuilder:
+        public: true
+    Backend\Modules\Pages\Domain\Page\PageRepository:
+        public: true
+    Frontend\Core\Engine\TwigTemplate:
+        public: true
+        arguments:
+            - "@twig.loader"
+    ForkCMS\Bundle\CoreBundle\Validator\UrlValidator:
+        public: true
+    Common\BlockEditor\Twig\ParseBlocksExtension:
+        public: true
+    Common\Doctrine\Entity\CreateSchema:
+        public: true
+    Monolog\Logger:
+        arguments:
+            - 'app'
+        public: true
+    SpoonDatabase:
+        class: SpoonDatabase
+        public: true
+        arguments:
+            - "%env(resolve:SPOON_DATABASE_DRIVER)%"
+            - "%env(resolve:SPOON_DATABASE_HOST)%"
+            - "%env(resolve:SPOON_DATABASE_USER)%"
+            - "%env(resolve:SPOON_DATABASE_PASSWORD)%"
+            - "%env(resolve:SPOON_DATABASE_NAME)%"
+            - "%env(resolve:SPOON_DATABASE_PORT)%"
+        calls:
+            - [ execute, [ 'SET CHARACTER SET :charset, NAMES :charset, time_zone = "+0:00"', { 'charset': 'utf8mb4' } ] ]
+            # The following line removes the ONLY_FULL_GROUP_BY from the sessions sql_mode, it was added in 5.7
+            # and caused some queries to break.
+            - [ execute, [ 'SET sql_mode = REPLACE(@@SESSION.sql_mode, "ONLY_FULL_GROUP_BY", "")'] ]
+            - [ setDebug, [ "%kernel.debug%" ]]
 
 #services:
 #    templating:

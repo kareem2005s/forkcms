@@ -17,8 +17,8 @@ require_once __DIR__ . '/autoload.php';
 
 use ForkCMS\App\AppKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Debug\Debug;
 
 // get environment and debug mode from environment variables
 $env = $_SERVER['FORK_ENV'] ?: 'prod';
