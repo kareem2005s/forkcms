@@ -41,7 +41,7 @@ final class PageContentType extends AbstractType
 
         $builder->add(
             'templateId',
-            ChoiceType::class,
+            TemplatesType::class,
             [
                 'choices' => array_flip(
                     array_map(
@@ -54,6 +54,7 @@ final class PageContentType extends AbstractType
                 'choice_attr' => function (int $templateId): array {
                     return [
                         'data-config' => $this->templates[$templateId]['json'],
+                        'data-html' => $this->templates[$templateId]['html'],
                     ];
                 },
                 'attr' => [
@@ -61,6 +62,7 @@ final class PageContentType extends AbstractType
                     'autocomplete' => 'off',
                 ],
                 'label' => 'lbl.Template',
+                'expanded' => true,
             ]
         );
 
